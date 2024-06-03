@@ -1,0 +1,83 @@
+.TH unitconv 1 "March 9, 2012" "XCrySDen" "XCrySDen"
+
+.SH NAME
+unitconv \- simple energy and length units converter
+
+.SH SYNOPSIS
+.B unitconv 
+.RI [ unit ]
+\fIvalue\fR
+.br
+.B  unitconv 
+.RI [ unit ]
+\fIexpression\fR
+
+.SH DESCRIPTION
+\fBunitconv\fR is a simple energy and length units converter (written
+in Tcl). It is a utility program of \fBxcrysden\fR package
+(\fIhttp://www.xcrysden.org/\fR).
+
+.SH ENERGY UNITS
+
+The following \fBenergy units\fR are supported.  The following list
+contain the "\fIunit\fR \-\- description" pairs, where the \fIunit\fR is to
+be specified on the command line.
+
+.TP 4
+\fBau\fR -- Hartree  
+.TP 
+\fBry\fR -- Rydberg
+'TP
+\fBev\fR -- eV (electron volt)
+.TP
+\fBkjm\fR -- kJ/mol
+.TP
+\fBkj\fR -- kJ
+'TP
+\fBkcalm\fR -- kcal/mol
+'TP
+\fBkcal\fR -- kcal
+
+.SH LENGTH UNITS
+
+The following \fBlength units\fR are supported (usage as above):
+
+.TP 4
+\fBangs\fR -- Angstrom
+.TP 
+\fBbohr\fR -- Bohr radius
+'TP
+\fBm\fR -- meter
+
+.SH EXAMPLES
+
+Convert a value from eV to other energy units:
+
+\fBunitconv ev 3.25\fR
+
+Calculate an expression (values in Rydberg unit) and convert to other
+energy units (note that expression must be quoted):
+
+\fBunitconv ry "-103.134567 - (-240.691356 - -2*17.543471)/2"\fR 
+
+In expression also mathematical functions available in \fBtclsh\fR can be
+used.
+
+.SH "COPYRIGHT"
+
+Copyright (C) 1996--2012 Anton Kokalj
+
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or (at
+your option) any later version.  You should have received a copy of
+the GNU General Public License along with this program; if not, write
+to the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+Boston, MA 02111-1307, USA.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+

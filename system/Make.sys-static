@@ -1,0 +1,152 @@
+########################################################################
+#
+# System-dependent definitions for Linux (static linking).
+#
+# (DEPRECATED) static compilation and linking is really deprecated !
+#
+# EDIT ACCORDING TO YOUR OWN NEEDS !!!
+#
+########################################################################
+
+#------------------------------------------------------------------------
+# if you have a GNU make it is better to set the MAKE variable to point
+# to gnu make
+#------------------------------------------------------------------------
+MAKE   = make
+
+#------------------------------------------------------------------------
+# compilers & flags
+#------------------------------------------------------------------------
+# static:
+#----------------------------
+# C-preprocessor flags
+CPPFLAGS =
+# C-compiler flags
+CFLAGS  = -static -ffast-math -funroll-loops -pedantic -Wall 
+LDFLAGS = -static 
+LDLIB   = -ldl -lpthread -lz
+MATH    = -lm
+CC      = gcc
+
+# let us see if -statig-libgfortran is sufficient (to avoid the use of
+# -static which produces huge executables (libc.so.6 should be present
+# on every system)
+
+FFLAGS  = -static-libgfortran -static-libgcc
+FC      = gfortran -fdefault-double-8 -fdefault-real-8 -O2
+
+
+
+#------------------------------------------------------------------------
+# X-libraries & include files
+#
+# linking static libraries is a total mess, consider using the shared
+# libraries instead (i.e. see system/Make.sys-shared file)
+# ------------------------------------------------------------------------
+X_LIB  = -lXmu -lX11 -lXss -lXext -lXft -lfontconfig -lstdc++ -lXt -lxcb -lfreetype -lXrender -lz -lexpat -lSM -lICE -lXau -lXdmcp -lX11 -lpng -luuid
+X_INCDIR  = 
+
+
+###
+### use EITHER THIS:
+###
+
+# #-Possibility-1----------------------------------------------------------
+# #
+# # If you want to use your own libraries and include files, then (1)
+# # uncomment the following lines and set the variables accordingly, and
+# # (2) uncomment the "Possibility-2" lines below.
+# #
+# #------------------------------------------------------------------------
+# 
+# #
+# # Libraries
+# #
+# TK_LIB      = -ltk$(TCL_VER2)
+# TCL_LIB     = -ltcl$(TCL_VER2)
+# TOGL_LIB    = -lTogl$(TOGL_VER)
+# GLU_LIB     = -lGLU
+# GL_LIB      = -lGL
+# FFTW3_LIB    = -lfftw3
+# # this is only used for some testing purposes
+# MESCHACH_LIB = -lmeschach
+# 
+# #
+# # Include directories
+# #
+# TCL_INCDIR  = -I/usr/include/tcl$(TCL_VER2)
+# TK_INCDIR   = 
+# TOGL_INCDIR =
+# GL_INCDIR   =
+# FFTW3_INCDIR =
+# 
+# #------------------------------------------------------------------------
+
+
+###
+### or THAT:
+###
+
+#-Possibility-2----------------------------------------------------------- 
+#
+# XCRYSDEN package may contain the Tcl/Tk, Mesa, FFTW, and Meschach
+# sources !!!
+#
+#------------------------------------------------------------------------
+
+# setting to "yes" will compile corresponding library in external/src/
+COMPILE_TCLTK    = yes
+COMPILE_TOGL     = yes
+COMPILE_MESA     = yes
+COMPILE_FFTW     = yes
+# this is only used for some testing purposes
+COMPILE_MESCHACH = no
+
+# alternatively, this will also compile anything
+#COMPILE_ALL = yes
+
+#
+# Do we want a shared library version of Tcl/Tk/Mesa or static?  If we
+# want shared then set the following flags to: --enable-shared else
+# set the following flag to: --disable-shared
+#
+
+TCLTK_OPTIONS  = --disable-shared
+TOGL_OPTIONS   = --disable-shared --with-tcl=$(TOPDIR)/external/lib --with-tk=$(TOPDIR)/external/lib
+# BEWARE: MESA_OPTIONS --> these cannot be built as static library
+MESA_OPTIONS   = --enable-static --disable-shared --with-driver=xlib --disable-dri --disable-gbm --disable-egl
+GLU_OPTIONS    = --disable-shared
+MESA_TARGET    = linux
+FFTW_OPTIONS   = --disable-shared
+#
+# Libraries (static linking)
+#           for shared linking the libraries postfix should be .so
+#           for static linking the libraries postfix should be .a
+#
+
+TCL_LIB      = $(TOPDIR)/external/lib/libtcl$(TCL_VER2).a
+TK_LIB       = $(TOPDIR)/external/lib/libtk$(TCL_VER2).a
+TOGL_LIB     = $(TOPDIR)/external/lib/libToglstub$(TOGL_VER).a \
+             $(TOPDIR)/external/lib/libTogl$(TOGL_VER).a \
+             $(TOPDIR)/external/lib/libtclstub$(TCL_VER2).a \
+             $(TOPDIR)/external/lib/libtkstub$(TCL_VER2).a
+GLU_LIB      = $(TOPDIR)/external/lib/libGLU.a
+GL_LIB       = $(TOPDIR)/external/lib/libGL.a $(TOPDIR)/external/lib/libglapi.a
+FFTW3_LIB    = $(TOPDIR)/external/lib/libfftw3.a
+# this is only used for some testing purposes
+#MESCHACH_LIB = $(TOPDIR)/external/lib/libmeschach.a
+
+
+#
+# Include directories
+#
+
+TCL_INCDIR      = -I$(TOPDIR)/external/src/tcl$(TCL_VER3)/generic
+TK_INCDIR       = -I$(TOPDIR)/external/src/tk$(TCL_VER3)/generic
+TOGL_INCDIR     =
+GL_INCDIR       = -I$(TOPDIR)/external/include 
+FFTW3_INCDIR    =
+# this is only used for some testing purposes
+#MESCHACH_INCDIR =
+
+#------------------------------------------------------------------------

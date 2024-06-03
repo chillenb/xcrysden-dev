@@ -1,0 +1,4 @@
+#define dotV_width 1
+#define dotV_height 6
+static unsigned char dotV_bits[] = {
+  0x01, 0x01, 0x01, 0x00, 0x00, 0x00, };

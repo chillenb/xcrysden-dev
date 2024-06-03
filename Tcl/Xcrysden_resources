@@ -1,0 +1,79 @@
+# ------------------------------------------------------------------------
+# if you have problems with fonts uncomment see the end of this file
+# ------------------------------------------------------------------------
+
+###########
+# MenuBar #
+###########
+
+*MenuBar.relief:                        raised
+*MenuBar.borderWidth:                   2
+*MenuBar*activeBackground:              #007d8d
+*MenuBar*activeForeground:              #ffffff
+
+*Viewer*activeBackground:               #007d8d
+*Viewer*activeForeground:               #ffffff
+
+
+#----------------------------
+# this is STANDARD !!!
+#----------------------------
+
+*Entry.background:		#daa
+*SilentEntry*Entry.background:	#ddd
+*Text.background:		#daa
+*Listbox.background:            #daa
+*Checkbutton.selectColor:       #ffffff
+*Radiobutton.selectColor:       #ffffff
+
+*RaisedFrame.relief:            raised
+*RaisedFrame.borderWidth:       2
+*GrooveFrame.relief:            groove
+*GrooveFrame.borderWidth:       2
+
+#------------------------------------------------------------------------
+# stressed color: #cfbab6 (testing the #b5a266 ; #b19a4b ; #bfaaa6 ; #9f8a86)
+#------------------------------------------------------------------------
+
+*ctrl*Button.background:	           #b5a266
+*ctrl*Radiobutton.background:	           #b5a266
+*ctrl*Checkbutton.background:	           #b5a266
+*ctrl*Button.foreground:	           #000000
+*ctrl*Radiobutton.foreground:	           #000000
+*ctrl*Checkbutton.foreground:	           #000000
+*ctrl*Button.highlightBackground:          #000000
+*ctrl*Radiobutton.highlightBackground:     #000000
+*ctrl*Checkbutton.highlightBackground:     #b5a266
+*mea*Radiobutton.highlightBackground:      #000000
+*mea*Checkbutton.highlightBackground:      #000000
+*mea*Button.highlightBackground:           #000000
+*close*Button.background:	           #b5a266
+*close*Button.highlightBackground:         #000
+*close*Button.foreground:	           #000000
+*mea*Button.background:	                   #b5a266
+
+*StressText*Frame.reliaf:                  ridge
+*StressText*borderWidth.reliaf:            2
+*StressText*Message.background:            #b5a266
+*StressText*Label.background:              #b5a266
+*Fileselect*Message.background:            #b5a266
+
+
+*DataGridBlock*Frame.background:           #ffce61
+*DataGridBlock*Label.background:           #ffce61
+*DataGridBlock*Radiobutton.background:     #ffce61
+
+*DataGridSubBlock*Frame.background:        #ffff9d
+*DataGridSubBlock*Label.background:        #ffff9d
+*DataGridSubBlock*Entry.background:        #daa
+*DataGridSubBlock*Checkbutton.background:  #99ddaa
+*DataGridSubBlock*Checkbutton.selectColor: #9999ff
+
+
+#------------------------------------------------------------------------
+# if you have problems with fonts try with one of below lines
+#------------------------------------------------------------------------
+
+%*font:fixed
+%*font:TkFontFixed
+%*font: -*-helvetica-medium-r-normal--10-*-*-*-*-*-*-

@@ -1,0 +1,935 @@
+************************************************************************
+REMARK: this ChangeLog is manually made, hence not all the changes are
+	recorded (some go undocumented)
+************************************************************************
+
+
+Jul & Aug 2019 Anton Kokalj (tone.kokalj@ijs.si)
+	* "Reload" button added to the main window (at the bottom toolbar)
+	that reloads the structure from file; useful for structure
+	building
+
+	* adding algorithm for reduction of lattice-vectors, i.e.,
+	(Wigner-Seitz cell and Brilluouin-zone were incorrect for non
+	reduced lattice-vectors)
+
+	* compatibility with Quantum ESPRESSO (QE) 6.x, in particular:
+	- aware of the new ibrav lattice definitions of QE (e.g. negative
+	  ibrav and ibrav=91);
+	- display of conventional cell-mode for centered lattice display
+	  from pw.x output
+	- display of structures from neb.x input file
+	- compatible with "ATOMIC_POSITIONS (crystal_sg)" specs, but it
+	  needs pw.x on $PATH
+
+	* compatibility with CRYSTAL17
+
+	* xcrysden ported to Togl2.0; togl is now used as library; togl.c
+	and togl.h removed from xcrysden; because the API of Togl2.0
+	changed, the syntax of *.xcrysden changed for the togl part;
+	adding the --os and --oldscript command line options for
+	backward-compatibility (with these options old *.xcrysden scripts
+	can be loaded); due to new Togl2.0 "Print To File" on come
+	computers produces blank images; if this happens add
+	"set printSetup(dumpWindow) 1" to ~/.xcrysden/custom-definitions file
+
+	* Julien Lefevre resolved the interp->result problem and thus
+	made xcrysden compatible with Tcl8.6 (many C files affected)
+
+	* improving xcrysden script (if xcrysden script was linked, the
+	linkqs were not always resolved correctly)
+
+	* xcrysden now uses gl2ps-1.4.0
+
+	* paraSize.c: adding new routine for determining the size of
+	parallelopiped and fixing a bug in DetermineParapipedSized, where
+	double vectors were wronly copied to float version
+
+	* readstrf.c: irrespective of whether rendering primitive or
+	convetional cell-mode the MVf.structsize is the same in both
+	cases, so size of atoms is the same in both cases
+
+	* togl options can be now specified in ~/.xcrysden/custom-definitions
+	file as "set toglOpt(opt) value"
+
+	* routines xcMakeProjection3D & xcMakeProjection2D were improved
+	and better determine the structure-size
+
+	* quoting variables in xcrysden script: while having a whitespace
+	in pathname is a bad idea, this modification makes xcrysden at
+	least partially usable (suggested by David Strubbe)
+
+	* adding new "Save Current State" menu option and new "--print"
+	command line option
+
+	* "make install" now installs "examples in
+	$(prefix)/share/doc/$(xcrysden)" and makes a link to
+	$(prefix)/share/$(xcrysden)/examples
+
+Mon Aug  7 2017 Anton Kokalj (tone.kokalj@ijs.si)
+	* Viewer.tcl: togl's "-accum" set back to "true", because it is
+	required for antialiasing (see the below change of Sat Apr 9
+	2016).
+
+Tue Jan  3 2017 Anton Kokalj (tone.kokalj@ijs.si)
+	* Recently there were a couple of problems reported on the wien2k
+	mailing list concerning fermi surface rendering with wien2k for
+	large k-grids. Peter Blaha fixed the problem by introducing
+	allocatable arrays, so that these problems should be gone (files:
+	wen_readbakgen.f, wn_readbands.f, get_ei.f)
+
+Tue Oct 18 2016 Anton Kokalj (tone.kokalj@ijs.si)
+	* readstrf.c: (1) better printout of XSF parsing error to stderr (in
+	some cases there was no error message and hence no hint of what
+	went wrong); (2) improving ReadVoronoi() function: if the file
+	contains a voronoi section, but with zero facets an error was
+	returned; this is now allowed
+
+Tue Jul 19 2016 Anton Kokalj (tone.kokalj@ijs.si)
+	* go2crys.tcl: making a workaround to display more than 999 atom
+	for CRYSTAL: xcrysden uses the crystal's EXTPRT keyword, but this
+	prints the number of atoms in I3 fortran format, hence only up to
+	999. (problem reported by M. K. Singh)
+
+Sat May 21 2016 Anton Kokalj (tone.kokalj@ijs.si)
+	* selection.tcl: a guard for acos(x) if x < -1.0 was missing
+
+Sat Apr  9 2016	Anton Kokalj (tone.kokalj@ijs.si)
+	* Viewer.tcl: togl's "-accum true" set to "false"
+
+Fri Mar 25 2016  Anton Kokalj (tone.kokalj@ijs.si)
+	* fixing ptable utility to work with tcl/tk8.6
+
+Mon Mar  7 2016  Anton Kokalj (tone.kokalj@ijs.si)
+	* adding support to load the structure from Orca
+		(https://orcaforum.cec.mpg.de/) output files. New files:
+		scripts/orca2xsf.sh. Modified files: parseComLinArg.tcl, menu.tcl,
+		usage, xcrysden.1.
+
+Mon Jul 27 2015  Anton Kokalj (tone.kokalj@ijs.si)
+	* propertyPlane.tcl: the BLACK-BROWN-WHITE colorplane didn't work
+		for 2D-only datagrids (reported by Matic Poberznik)
+
+Thu Aug 14 2014  Anton Kokalj (tone.kokalj@ijs.si)
+	* cygwin.tcl: The if { $xcrys(platform) == "cygwin" }
+		conditional missed the custom implementation of exec command
+		(problem spotted by Gavin Abo) *** needs checking ***
+
+Wed Jun 25 2014 Anton Kokalj (tone.kokalj@ijs.si)
+	* making xcrysden aware/compatible with the new CRYSTAL-14
+		version (files affected: bwid.tcl, runC95.tcl, read25.tcl,
+		propInit.tcl, menu.tcl, state.tcl, check_package.tcl,
+		groupSel.tcl, openInput.tcl, propC95.tcl, gengeom.tcl,
+		xcIsoSurf.c, readisodata.c)
+	* adding a fix as proposed by Martin Kroeker to prevent
+		the XError aborts (his XErrorFunction(*) error handler
+		added to xcAppInit.c)
+	* window grab may cause a crash (reported by Georg Eickerling, Masood
+		Yousaf, Martin Kroeker); the grabs are "catched" now (many
+		Tcl files affacted)
+	* implementing Markus Waldeck's suggestion to honour the value of
+		TMPDIR (or TMP) for the setting of XCRYSDEN_SCRATCH
+	* pwi2xsf.sh: atomic-symbols are printed in capitalized form
+	* fixing the crash due to pressing the <F3>/<F>4 shortcuts for
+		non-periodic structures (file: menu.tcl)
+	* visualization of pw.x output file: now it is possible to select
+		only the type of coordinates that actually exist in the output
+		file as to prevent the annoying misses/failures (files:
+		pwPreset.tcl, pwo_coortype.awk)
+
+Tue Jun 10 2014 Anton Kokalj (tone.kokalj@ijs.si)
+	* fixing some newly introduced bugs with the last update of
+		pwi2xsf filter (file: pwi2xsf.f)
+
+Mon Jun 02 2014 Anton Kokalj (tone.kokalj@ijs.si)
+	* making the pwi2xsf filter aware of new QE syntax for
+		CELL_PARAMETERS units and upgrading to new QE's ibrav definitions
+		(files affected: pwLatgen.f pwi2xsf.f pwError.f)
+
+Wed Jun 12 2013 Anton Kokalj (tone.kokalj@ijs.si)
+	* fixing lighting-off EPS printing in scripting::printToFile
+		(thanks to Fadjar Fathurrahman)
+
+Thu Jan 24 2013 Anton Kokalj (tone.kokalj@ijs.si)
+	* possible bug fix in (overflow) XC_TranslParamCmd; larger string
+		was written than allocated (in xcAppInit.c)
+
+Mon Mar 12 2012	  Anton Kokalj (tone.kokalj@ijs.si)
+	* xcrysden: using temporary file (mktemp) for the argument of gdb
+		(suggestion of Tobias Burnus)
+	* stripping off the dependence of xcrysden on Meschach library
+		(this is merely used for some testing purposes)
+
+Sat Mar 10 2012	  Anton Kokalj (tone.kokalj@ijs.si)
+	* using $(CURDIR) instead of $(PWD) in top Makefile (inspired by
+		Michael Banck)
+	* shank_util.c: print_complex_vector & print_complex_matrix debug
+		routines compiled only if DEBUG is defined (it was reported to
+		cause compilation problems)
+
+Fri Mar 09 2012	  Anton Kokalj (tone.kokalj@ijs.si)
+	* writing xcrsyden's utility programs man pages (ptable -- simple
+		periodic table, unitconv -- simple energy and length units
+		converter, pwo2.xsf, and pwi2xsf)
+	* updating physical constants for unitconv
+	* several scripts needed patching due to new "make install" type
+		system-wide installation. Also ptable and unitconv now depends on
+		plain tclsh and wish instead of xctclsh and xcrys.
+	* change in packaging: xcrysden-**** directory is now used instead
+		of XCrySDen-****
+	* using newer gl2ps package (v.1.3.6), increasing the buffersize
+		for  gl2psBeginPage + opening the file in binary mode for
+		PDF
+	* further improving "make install" target
+
+Mon Feb 20 2012	  Anton Kokalj (tone.kokalj@ijs.si)
+	* for crystal structure the cell borders are display by default
+	* fixing nasty bug for displaying isosurfaces for CRYSTALxx
+		package. For some weird reason maximum number of grid points along
+		3rd direction was only 100
+	* further fixing of movie-maker (problems with proper writing of
+		image files to scrtach/pwd directories)
+	* fixing some bugs associated with colorplane's thermometer fonts
+	* implementing cd_debug routine to trace changing directories in
+		debug mode
+	* writing xcrysden man page
+	* "make install" now install xcrysden system-wide in
+		$prefix/bin/xcrysden, $prefix/lib/xcrysden/,
+		$prefix/share/xcrysden/). In order to do so, two new few
+		enviromental variables were made use of:
+		XCRYSDEN_LIB_BINDIR, XCRYSDEN_XCRYS_DIR (these is totally
+		transparent for user, which does not need to know about
+		them).
+
+Fri Feb 17 2012	  Anton Kokalj (tone.kokalj@ijs.si)
+	* correcting spelling correction monocrome to monochrome (may
+		break the old *.xcrysden scripts)
+
+Tue Feb 14 2012	  Anton Kokalj (tone.kokalj@ijs.si)
+	* adding --custom command line option, which load a
+		custom-definitions like customization from specified file
+	* adding --gXX_out and --gaussian_out command line options (same
+		as --g98_out)
+	* adding --cube and --gXX_cube command line options (same
+		as --g98_cube)
+	* sources of external needed libraries are now download by wget
+		upon request during compilation (no more src and src-all division)
+	* auxil.tcl: fixing bug in positiveInteger proc and implementing
+		argba and allowedValue procs
+
+Mon Feb 13 2012	  Anton Kokalj (tone.kokalj@ijs.si)
+	* implementing the user $HOME/.xcrysden/custom-definitions
+		configurability for Fermi surface viewer (suggested by Jonathan
+		Denlinger)
+	* use of xcConfigure.sh is deprecated, hence it was moved into
+		scripts/ directory
+
+Fri Feb 10 2012	  Anton Kokalj (tone.kokalj@ijs.si)
+	* fixing string reading problems for gfortran > 4.5 compiled
+		programs (using Fortran95 intrisincs instead)
+
+Tue Jan 31 2012	  Anton Kokalj (tone.kokalj@ijs.si)
+	* xcrysden now checks for stale files in $XCRYSDEN_SCRATCH and
+		prompts the user for their deletion
+
+Mon Jan 30 2012	  Anton Kokalj (tone.kokalj@ijs.si)
+	* fixing movie-maker: some modes did not work properly; files
+		affected xsfAnim.tcl, gifAnim.tcl, movieMaker.tcl, state.tcl
+
+Wed Jan 25 2012	  Anton Kokalj (tone.kokalj@ijs.si)
+	* tried to fix a long standing bug associated with
+		LoadLights() routine {calling glLightfv() without a rendering
+		context} reborted by Tobias Burnus and others.
+	* disabling stereo for mac
+	* changing default antialias offset parameter to 0.39
+	* modifying a few emprirical parameters for H-bond determination
+	* disabling crystel-cell mode display buttons for molecules
+
+... ChangeLog discontinued/not-mainted for intermediate period ...
+
+Fri Jun 17 2011   Anton Kokalj (tone.kokalj@ijs.si)
+	* pwo2xsf.sh, pwo2xsf_opt.awk: the pw.x optimized coordinates of
+		the QE 4.x are now correctly extracted
+
+Thu Mar 31 2011   Anton Kokalj (tone.kokalj@ijs.si)
+	* xcBz.c: fixing a bug reported by P.Blaha (reported to him by
+		somebody else) related to a problem when only two special
+		k-points are selected.
+
+Fri May 21 2010   Anton Kokalj (tone.kokalj@ijs.si)
+	* multatom.f: for translation_assymetric_unit display the atoms
+		are not shifted back to the unit-cell anymore (seggestion
+		of HU Shu-jun)
+
+	* isoContorl.tcl: default isoline color changed to black
+
+Fri Jul 31 2009   Anton Kokalj (tone.kokalj@ijs.si)
+	* xcInit.tcl: preventing a welcome window on macosx (bad
+		interaction with the system)
+	* auxil.tcl: an attempt to fix a font support for atomic labels on
+		macosx
+
+Thu Jul 30 2009   Anton Kokalj (tone.kokalj@ijs.si)
+	* Viewer.tcl: adding a fine-tune translation-step entry on the
+		toolbox (requested by Stefano Fabris)
+
+Wed Jul 29 2009   Anton Kokalj (tone.kokalj@ijs.si)
+	* scroll.tcl, auxil.tcl, Viewer.tcl, dispModes.tcl: implementing a
+		mouse-wheel scrolling of xcrysden's main toolbox
+	* cube2xsf.f: allowing for a free format in the cube file
+		(suggested by Michael Rutter)
+	* g98.tcl: changing the order of the Viewer and the "which MO
+		question" windows calls
+
+Tue Jul 28 2009   Anton Kokalj (tone.kokalj@ijs.si)
+	* Viewer.tcl: the Maxi button on the toolbox has a sligtly
+		different action: the whole window is maximized so as to
+		be drawn without window border.
+
+Mon Jul 27 2009   Anton Kokalj (tone.kokalj@ijs.si)
+	* scripting.tcl, menu.tcl: adding scripting::save command
+		(suggested by Rong Yu)
+	* menu.tcl, modAtomAttrib.tcl: adding an update button to almost all "Modify" windows
+
+Mon Jul 20 2009   Anton Kokalj (tone.kokalj@ijs.si)
+	* cube2xsf.f: adaptation to accept the empty comment line in the
+		cube-file
+
+Thu Feb 05 2009   Anton Kokalj (tone.kokalj@ijs.si)
+	* crySetProj.c: fixing a weird bug: it was not able to rotate
+		Fermi Surface under some circumstances, because the
+		wc->VPf.VPfactor was infinite (problem spotted by
+		Pablo de la Mora)
+	* xcrysden: adding an "unset MALLOC_CHECK_" due to problems
+		encountered under openSUSE (thanks to Lorenzo Paulatto)
+
+Fri Dec 11 2008   Anton Kokalj (tone.kokalj@ijs.si)
+	* FS_Main.tcl: adding cygwin/windows mouse-wheel support for
+		zooming the Fermi-Surface(s)
+
+	* xcAppInit.c, Make.cygwin: adding the CYGWIN preprocessor
+		flag (now WIN32 and CYGWIN are two different flags:
+		-DCYGWIN -DWIN32 together are now used for cygwin build of
+		xcrysden with cygwin tcl/tk (this is a unix/windows
+		hybrid, tcl/tk=windows, but all others is unix), whereas
+		only -DWIN32 will be used for pure windows builds (with
+		the mingw support).
+
+	* edit.tcl: fixing bug for default-editor: "Close" button didn't
+		work.
+
+Thu Dec 11 2008   Anton Kokalj (tone.kokalj@ijs.si)
+	* scripting.tcl: "scripting::display as cell-mode" didn't work
+		(spotted by Juergen Spitaler). Fixed.
+
+	* forces were not saved into *.xcrysden script for periodic
+		structures (reported by Juergen Spitaler): fixed. This
+		implyed also into some changes to ReadXSF routine, which has
+		been chnaged (i.e. improved).
+
+	* getline.c: adding kind of "reserve" variant of getline()
+		function: if the linker can't find a usable getline()
+		function, i.e., when you get undefined reference to
+		`getline', then add -DHAVE_NO_GETLINE flag to
+		CFLAGS in Make.sys
+
+	* saveState.tcl: replacing "exec date" with Tcl clock command.
+
+Wed Dec 10 2008   Anton Kokalj (tone.kokalj@ijs.si)
+	* porting to CYGWIN:
+		- launch.sh: adding simple lanucher wrapper (used by
+		cygwin version
+		- cygwin.tcl: adding more hacks for cygwin: the main
+		problem there is that Tcl/Tk is compiled as native window
+		applciation, and handles paths as native windows, while
+		cygwin (and many programs therein) handles paths in
+		unix-way
+		- xsfOpen.tcl: on cygwin the gunzip creates
+		write-protected file (a call to chmod +w added)
+		- Viewer.tcl: (1) disabling stereo mode for cygwin,
+		and (2) an attempt to add <MouseWhell> binding for
+		windows (i.e. mouse-wheel zooming)
+
+	* pwi2xsf.sh, pwo2xsf.sh, pwo2xsf_old.sh, pwGenNC.sh, run_test.sh:
+		making scripts consistent with the fact that
+		XCRYSDEN_TOPDIR is optional (if not it is obtained from
+		the "process")
+
+	* togl.c: fixing bug (C++ comment converted into C comment; some
+		compilers complained)
+
+	* togl_ws.h: adding support for WIN32 OS
+
+	* xsfAnim.tcl, isoContorl.tcl, stop.gif: adding "stop" button to animations
+		(suggested by LIANG Yunfeng)
+
+	* gifAnim.tcl, state.tcl, movieMaker.tcl: checking if xcMisc(gif_encoder) and
+		xc(movie_encoder) (i.e. gif and mpef/avi encoders) exists; if not
+		corresponding format is disabled.
+
+Wed Dec 03 2008   Anton Kokalj (tone.kokalj@ijs.si)
+	* selection.tcl: distances reported in Angstrom and Bohr units
+		(suggested by P. Blaha). The format of measured distances
+		and angles is configurable now and controlled by
+		select(dist_precision) and select(angl_precision)
+		variables in custom-definitions file (these two variables
+		specify the number of decimal digits for distances and
+		angles, respectively).
+
+	* introduction of system(c95_crystal) variable for CRYSTAL
+		specification in custom-definitions file: it replaces
+		obsolete system(c95_integrals) and system(c95_scf)
+		variables.
+
+	* xcConfigure_definitions.sh: the backup of custom-definitions
+		file is now stored to unique filename to omit overwrites;
+		adding an example of select(dist_precision) and
+		select(angl_precision) specification; replacing
+		system(c95_integrals) and system(c95_scf) with
+		system(c95_crystal).
+
+	* readXYZ.f: crystal fort.33 may contain several snapshots of the
+		structure, now the last one is read (or else several
+		AdvGeom features will not work)
+
+Mon Dec 01 2008   Anton Kokalj (tone.kokalj@ijs.si)
+	* xcIsoSurf.c, xcIsoDataGrid.c, isosurf.h, struct.h: from the
+		beginning of xcrysden, the illummination of isosurfaces
+		was the "upside-down", and the bug couldn't be properly
+		fixed, unitl now: The reason was remarkably simple and due
+		to orientation of the isosurface spanning
+		vectors (left/right). Now the orientation is checked, and
+		the isosurface normals reverted if necessary.
+
+	* MarchCubes.c: fixing SIGSEGV bug in xcSurfSmoothing:
+		vertex_status hasn't been allocated.
+
+	* parseComLinArg.tcl, genWidgets: don't display xcrysden structure
+		viewer when in Fermi Surface mode
+
+	* toglZoom.tcl, toolbox.tcl: adding toglZoom:discreteZoom proc so
+		that Fermi-Surface zooming is done click-by-click
+
+Fri Nov 28 2008   Anton Kokalj (tone.kokalj@ijs.si)
+	* movieEncoders.tcl: fixing small bug related to file conversion
+		for mencoder.
+
+	* wigner.f, convexhull.f: xcrysden crashed for the example
+		al2o3.struct: presumambly the cause was the use of stupid
+		"implicit real*8" statement. Explicitly defining the
+		variables + implicit none fixed the problem.
+
+	* Grapher.tcl: for tcl8.5/tk8.5 the bgraphs have just grown out of
+		screen size: in PlaceGrapher proc a "tkwait visibility
+		$f.can" inserted to force the display of the graph widget
+		before the <Configure> event takes place.
+
+	* propertyPlane.tcl: now the colorplane and contours checkbuttons
+		are "on" (i.e. checked) by default (suggested by P. Blaha)
+
+	* wnDetComOpt.tcl: the Wien2K complex-case was not recognized
+		properly: fixed (thanks to P. Blaha)
+
+	* wnRunWIEN.tcl: first attempt to support parallel execution of
+		lapw1 and lapw2 (suggested by P. Blaha)
+
+	* wnFSInit.tcl, wnFS.tcl: updating FS generation procedure to be compatible
+		with WIEN2k_08 according to P. Blaha guidelines (changed
+		question of kgen program seems to be the source of
+		problems). Adding possibility to execute lapw1/lapw2 in
+		parallel.
+
+	* isoControl.tcl: in the case of 2D data-grid, an error occured if
+		user pressed "Close" button on Control-window: fixed
+
+Tue Nov 25 2008   Anton Kokalj (tone.kokalj@ijs.si)
+	* movieMaker.tcl, gifAnim.tcl, menu.tcl, xsfAnim.tcl,
+	realTimeMovie.c, xcAppInit.c, xcTogl.c, xcDisplayFunc.c,
+	xcDisplayFunc2.c, xcSelect.x, struct.h, xcfunc.h:
+		implementing a Movie Maker with three supported modes:
+		+ "real-time capture" mode: a display of the Togl window
+			(.mesa) is captured every specified time interval
+		+ "every redisplay" mode: whenever Togl winodw is
+			redisplayed a picture is captured
+		+ "manual" mode: user continuously presses a
+			"camere-photo" button on the Togl display window
+			for creating movie frames
+
+	* isoControl.tcl: adding a scale-widget for specifying a
+		time-delay for colorplane/contour animation
+
+	* togl.c, Viewer.tcl, stereo.tcl: stereo-mode recognition is
+		hopefully fixed
+
+	* dumpWindow.tcl: adding new proc for dumping the window; the
+		printWidget proc is now obsolete. The dumpWindow proc uses
+		ImageMagicks import utility for window dump, and if
+		image-magick is not present it tries with xwd.
+
+	* xcConfigure.sh, xcConfigure_definitions.sh, xcConfigure_updateProfile.sh:
+		simplified xcConfigure.sh script, since xcrysden
+		automatically checks for packages now. Only crystal
+		packages is queried by the install script.
+
+	* system/Make.*: updating Make.sys files (the default is to use
+		the system liubraries now)
+
+	* scriptingMakeMovie.tcl: scripting::makeMovie::init's options
+		-firstframe -lastframe didn't work: fixed
+
+	* pwLatgen.f: "ibrav" lattices synchronized with QE definitions,
+		in particular, a nd b vectors for ibrav=5,7,10 have been
+		interchanged.
+
+Fri Nov 21 2008   Anton Kokalj (tone.kokalj@ijs.si)
+	* selection.tcl, advGeom2.tcl, auxil.tcl, loadvalues.c, struct.h:
+		enhancing the "measure" procedure (distances, angles, ...):
+		coordinates of selected atoms can be displayed
+		in various units (angs, bohr, crystal-primitive,
+		crystal-convetional, alat).
+
+	* xcAtomAdd.c, xcDisplayFunc.c: cell-adding mode for ATOMINSE
+		advGeom option was not working - fixed
+
+	* edit.tcl, auxil.tcl, check_package.tcl, xcInit.tcl: making
+		xcEditFile procedure safer: xcrysden chacks for terminal
+		now (xterm is not anymore present anywere). If there is no
+		terminal found, than defaultEditor will be used for editor
+
+	* atomlab.f, atoms.inc, advGeom2.tcl: crystal advGeom options
+		ATOMREMO, ATOMSUBS, and ATOMDISP were not working properly,
+		because atomic-label was wrongly determined: fixed
+
+Wed Nov 19 2008   Anton Kokalj (tone.kokalj@ijs.si)
+	* movieEncoders.tcl, gifAnim.tcl, mpegParam.tcl, xsfAnim.tcl:
+		improving the movie making: several encoders are
+		supported now:
+		For animated GIF: convert, gifsicle, whirlgif
+		For AVI/MPEG movies: mencoder, ppmtompeg
+
+	* xcInit.tcl, find_package.tcl: automatic search for external
+		packages that xcrysden uses
+
+Mon Aug 25 2008   Anton Kokalj (tone.kokalj@ijs.si)
+	* xsf2xsf.c: fixing bug: the reduction of dimension to 1 (polymer)
+		was not working
+
+Wed May 21 2008   Anton Kokalj (tone.kokalj@ijs.si)
+	* fixing bug: molecules (dim==0) have not been loaded from crystal
+		unit-9 (affected proc CellMode)
+
+Mon May 19 2008   Anton Kokalj (tone.kokalj@ijs.si)
+	* colors and transparency of isosurfaces have not been saved into
+		*.xcrysden script. Now this feature is implemented.
+
+Tue Apr 22 2008   Anton Kokalj (tone.kokalj@ijs.si)
+	* pwi2xsf.f: the COSAB/COSAC/COSBC where wrongly assigned to
+		celldm(4-6) due to typo (spotted by Fan Yang).
+
+Tue Mar 25 2008   Anton Kokalj (tone.kokalj@ijs.si)
+	* saveState.tcl: force's attributes were stored, but not requested
+		to load upon executing the script.
+
+Tue Feb  5 2008   Anton Kokalj (tone.kokalj@ijs.si)
+	* xcrysden: the XCRYSDEN_TOPDIR and XCRYSDEN_SCRATCH environmental
+		variables are not required anymore, but optional. If not
+		set, the former is obtained from the "process" and the
+		latter is set to /tmp (suggested by P. Giannozzi).
+
+Fri Nov 30 2007   Anton Kokalj (tone.kokalj@ijs.si)
+	* xcrysden uses Togl-1.7 now. Files adopted: togl*.*
+	* xcrysden uses gl2ps-1.3.2 now. Files adopted: gl2ps.c, gl2ps.c
+
+Wed Nov 14 2007   Anton Kokalj (tone.kokalj@ijs.si)
+	* pwo2xsf_anim.awk, pwo2xsf_opt.awk: adopting to changed pw.x
+		(v4.0) output
+
+Wed Jan 24 2007   Anton Kokalj (tone.kokalj@ijs.si)
+	* cube2xsf.f: replaced free format write with the '(3e20.12)' to
+		avoid D fortran exponent (suggested by M.J. Rutter).
+
+Fri Dec 08 2006   Anton Kokalj (tone.kokalj@ijs.si)
+	* xcForces.c: fixing severe bug (spotted by Yingli Niu) concerning
+		the length of displayed forces: the length was accounted
+		for twice, so instead of linear scaling the display of
+		forces had quadratic scaling.
+	* multatom.f: funny roundoff problem (found by W. YU). Some atoms
+		were cropped out of the cell that shouldn't be. A small
+		number (1d-10) is now added to before croping, and after
+		this number is subtracted.
+
+Mon Nov 09 2006   Anton Kokalj (tone.kokalj@ijs.si)
+	* Viewer.tcl, bz.tcl, FS_Main.tcl, FS_Multi.tcl: adding
+		mouse-wheel support (I finally got a mouse with wheel).
+
+Mon Oct 02 2006   Anton Kokalj (tone.kokalj@ijs.si)
+	* atoms.h: correcting radii of noble gases
+
+Tue Sep 26 2006   Anton Kokalj (tone.kokalj@ijs.si)
+	* pwo2xsf.sh, pwo2xsf_opt.awk, pwo2xsf_anim.awk, pwo2xsf_neb.awk:
+		adding "-r" flag (for reducing the dimension) to
+		pwo2xsf.sh script.
+	* xsf2xsf.c: fixing bug related to "MOLECULE" keyword
+
+Mon Sep 25 2006   Anton Kokalj (tone.kokalj@ijs.si)
+	* readstrf.c, detnsplit.c: fixing a memory-hole bug, that happaned
+		when many atoms were deleted due to their overlap
+		(problem spotted by Dario Alfe)
+
+Mon Sep 04 2006   Anton Kokalj (tone.kokalj@ijs.si)
+	* readisodata.c, xcIsoSurf.c: adapting to crystal06
+
+Fri Sep 01 2006   Anton Kokalj (tone.kokalj@ijs.si)
+	* check_package.tcl, xcInit.tcl: adding support for Crystal06
+	* bwid.tcl, propInit.tcl, read25.tcl: support for Crystal06
+	* propC95.tcl: support for Crystal06 and IS1/IS2/IS3 shrinking factors
+
+Thu Aug 31 2006   Anton Kokalj (tone.kokalj@ijs.si)
+	* ginp.awk: adapting to Crystal06 (adding OPTGEOM support)
+
+Tue Aug 22 2006   Anton Kokalj (tone.kokalj@ijs.si)
+	* xsf2xsf.c: bug-fix: when reducing the dimension the group number
+		(DIM-GROUP) should be set to one (reported by Raghani Pushpa).
+
+Wed Aug 16 2006   Anton Kokalj (tone.kokalj@ijs.si)
+	* saveState.tcl: fixing bug for display radii which were not
+		reloaded properly.
+
+Fri Aug 11 2006   Anton Kokalj (tone.kokalj@ijs.si)
+	* pwo2xsf_neb.awk: fixing a bug in "Forces acting on atoms" rule.
+
+Fri Jul 28 2006   Anton Kokalj (tone.kokalj@ijs.si)
+	* pwi2xsf.sh: fixing a bug: if the fortran namelist has been
+		terminated as " /" (i.e. with multiple spaces) that was
+		not properly recognized (reported by Gabriele Sclauzero).
+
+Mon May 08 2006   Anton Kokalj (tone.kokalj@ijs.si)
+	* pwo2xsf_anim.awk, pwo2xsf_opt.awk, pwo2xsf_new.awk: bug fix:
+		these scripts were stalled if the output file ended with
+		Forces acting on atoms (Ry/au): line.
+
+Sat Apr 08 2006  Anton Kokalj (tone.kokalj@ijs.si)
+	* menu.tcl: proc CellMode (for species MOLECULE the display was
+		not updated: when using the CLUSTER crysta option).
+
+Mon Mar 27 2006 Anton Kokalj (tone.kokalj@ijs.si)
+	* openInput.tcl, go2crys.tcl, runC95.tcl, advGeom.tcl: added the
+		possibility to load crystal inputs with "EXTERNAL" keyword
+		(requested by mksingh@cat.ernet.in)
+	* glLight.tcl: the glLight:load proc supplemented (adding a call
+		to glLight:update).
+	* parseComLinArg.tcl: fixing bug: glLights:load -> glLight:load
+		(spotted by Oleksandr Voznyy)
+
+Wed Feb  8 2006 Anton Kokalj (tone.kokalj@ijs.si)
+	* xcAppInit.c: "Save Structure and Save" did not work, because Xcrysden
+		hanged in XC_RotationMatrixCmd() (for tcl-custom-command:
+		xc_rotationmatrix get). Bug fixed.
+	* xcSelect.c: sometimes the selection of atoms was difficult
+		(buggy, as nearest atoms were selected instead). Bug fixed
+		in function xcSelectSqn.c
+
+Fri Oct  7 2005 Anton Kokalj (tone.kokalj@ijs.si)
+	* pwo2xsf.sh, pwo2xsf_old.sh, pwi2xsf.sh, g98toxsf.sh,
+		gzmat2xsf.sh: adding a few lines of the beginning of each
+		script file to set the locales to "C". This ensures that
+		awk will use "." character and not te "," character as the
+		decimal delimiter.
+
+Thu Oct  6 2005 Anton Kokalj (tone.kokalj@ijs.si)
+	* xsf2xsf.c, readstr.c: adding the carriage return "\r" as the
+		newline character. Problem reported by Nuno A. G. Bandeira
+
+Tue Jul 19 2005 Anton Kokalj (tone.kokalj@ijs.si)
+	* g98.tcl: correcting small typo: $system(TOPDIR)/bin -->
+		$system(BINDIR) (reported by M.J. Rutter).
+
+Thu Jun  9 2005 Anton Kokalj (tone.kokalj@ijs.si)
+	* savestruct.f: fixed a bug in XSF to WIEN2k struct file
+		conversion program. In calculating the frmt(i), the i has
+		been replaced with nat(i).
+
+Tue Jun  7 2005 Anton Kokalj (tone.kokalj@ijs.si) (tagged: 1.4.1)
+	* readstr.c: severe bug in XSF reader, function ReadCoor()
+		(observed by M.J. Rutter). The bug was made when fixing
+		some other bug from May 30 2005. The line following the
+		end of PRIMCOORD (or CONVCOORD) section was not read.
+	* xcConfigure.sh, xcConfigure_updateProfile.sh: there were some
+		problems in the installation under CYGWIN (reported by:
+		Guillaume HERLEM). The stderr redirection ">&" was changed
+		to "> output 2>&1".
+
+Mon May 30 2005 Anton Kokalj (tone.kokalj@ijs.si) (tagged: 1.4)
+	* readstr.c: the ReadCoor() had a bug in reading XSF's *COORD when
+		forces when present, hence the xc_writeXSF didn't work
+		properly in this case.
+	* improving installation procedure (also fixing a few bugs
+		therein) (files: xcConfigure.sh, xcConfigure_*.sh)
+
+Fri May 27 2005 Anton Kokalj (tone.kokalj@ijs.si)
+	* one more bug spotted by Pablo de la Mora: the vectorial EPS
+		print didn't work for the Fermi surfaces (bu fix in file:
+		gl2psPrintTogl.c).
+	* bz.tcl: the unrecognized k-points in k-path selection are now
+		labeled as K.digit.
+	* comments were added to the XSF file format. Comment lines start
+		with the "#" character and can be located only in between
+		the sections, but within a given section. (Files:
+		xsf2xsf.c, readstrf.c, xcReadXSF.c)
+
+Thu May 26 2005 Anton Kokalj (tone.kokalj@ijs.si) (v1.3.4)
+	* fixed severe bug: for some lattices the gengeom program hanged
+		(spotted by Chee Kwan GAN). The parallelepipedDiagonal
+		function was added in p2c.f file.
+
+Wed May 25 2005 Anton Kokalj (tone.kokalj@ijs.si) (v1.3.3)
+	* enhancing the anaglyph mode; adding also solid-3D modes for
+		anaglyph display (Files: xcAppInit.c, xcDisplayFunc.c,
+		Viewer.Tcl).
+
+Mon May 23 2005 Anton Kokalj (tone.kokalj@ijs.si) (v1.3.2)
+	* adding the "xc_stereo" command (xcAppInit.c) for querying if
+		hardware supports the stereo. Querying this via the
+		"catch [togl .t -stereo true]" seems unstable.
+	* adding a call to Set_sInfoArray(interp) into the XC_ReadXSFCmd
+		routine (used for xcrysden --wien_struct) as this option
+		never opens the crystal structure
+	* bz.tcl, wnKPath.tcl: the Emin/Emax patch of Peter Blaha
+
+Thu May 12 2005 Anton Kokalj (tone.kokalj@ijs.si) (v1.3.1)
+	* adding examples/Scripting/plot_all_MO.sh to show how to plot all
+		molecular orbitals automatically
+	* FS_Main.tcl (Fermi surface viewer): accelerator keys didn't work
+		(noticed by Jens Kunstmann). Depth-cuing turned-off by
+		default. Default depth-cuing *_ORT_END_F set to 0.5.
+	* kLabels.tcl: Automatic labeling of selected k-points (K-path
+		selection). Thanks for Peter Blaha for the idea and for
+		his k-point labeling lookup table. The most important
+		points for 7 types of Bravais lattices are currently
+		recognized.
+	* replacing the string WIEN97 with WIEN2k
+	* replacing the string CRYSTAL95/98 with CRYSTAL-95/98/03
+	* changing a bit the File menu layout (adding the PWscf
+		... cascade)
+	* default diplayed cell for crystal structures set to Conventional
+	* updating to GL2PS v1.2.4: finaly the vectorial EPS printing of
+		Lighting-On mode is good enough. Such printing still takes
+		long time, but the resulting quality of EPS is excellent
+	* two bugs in visualziation of Fermi surface (observed by Pablo
+		de la Mora) were solved:
+		- the origin and size of the parallelepipedal grid that
+		encapsulated the BZ was wrongly determined: the result was
+		that usually one additional gridpoint (per direction) was
+		included in the BZ or alternatively a small part of the FS
+		of the second BZ was located in the first BZ.
+		- fixing the bug of interpolation when the BZ cropping was off.
+
+Wed May 11 2005 Anton Kokalj (tone.kokalj@ijs.si)
+	* xcSelect.c: fixing a memory allocation bug (char *atomdata)
+	* xcSelect.c, xcDisplayFunc.c: clean-up of selection lists (no
+		more used)
+	* str2xcr.f, savestruct.f, nn.f: compatibility changes for WIEN2k
+		(contributed by Peter Blaha)
+
+Tue May 10 2005 Anton Kokalj (tone.kokalj@ijs.si)
+	* adding anaglyph display mode (contributed by
+		Eric VERFAILLIE <ericverfaillie@yahoo.fr>)
+	* adding stereo	display mode (contributed by
+		Gerardo Ballabio <g.ballabio@cineca.it>)
+	* Making a CVS commit of long-time changes. Many files affected.
+
+Mon Jan 17 2005 Anton Kokalj (tone.kokalj@ijs.si)
+	* pwi2xsf.f: fixing the bug for converting the coordinates in
+	crystal units of PWscf input file to XSF format.
+
+Mon Sep 13 2004 Anton Kokalj (tone.kokalj@ijs.si)
+	* xcInit.tcl, Viewer.tcl: "wm iconify ." and "wm deiconify ."
+		calls are caught now, as they can fail sometimes
+
+Mon Sep 09 2004 Anton Kokalj (tone.kokalj@ijs.si)
+	* fs.c: cleanup (removing some debugging stderr/stdout printout)
+
+Sat Sep 04 2004 Anton Kokalj (tone.kokalj@ijs.si)
+	* error in BXSF parser (spotted by Newton Ooi). "BEGIN_BANDGRID_3D"
+		keyword was not recognised.
+
+Wed Jul 28 2004 Anton Kokalj (tone.kokalj@ijs.si)  (tagged: Beta-1.2.0)
+	* fixing a bug in "scripting::displayWindow resize". Both width
+		and height can be set correctly now (bug reported by
+		Alexander Hannemann).
+	* adding new configuration options for forces (arrows): arrows
+		thickness, color, ...
+	* due to the change of the "X" dummy atom behaviour (see below) it
+		was trivial to implement visualization of vector-field,
+		displaying vectors as arrow. One should use the following
+		XSF syntax: "X x y z vx vy vz", where "X" designates dummy
+		atom, x/y/z is the position, and vx/vy/vz vector
+		components. Files adapted: forces.c loadValues.c,
+		xcForces.c, xcAppInit.c, menu.tcl, forces.tcl
+	* the behaviour of dummy atom "X" (atomic-number 0) was changed:
+		now it cannot have bonds (suggestion of Eric
+		VERFAILLIE). Also its color and display radius can be
+		set.Files affected: readstrf.c, auxil.tcl,
+		modAtomAtrib.tcl
+	* adding configuration options for Coordinate system display
+		(custom color can be set now). Files affected: xcLabels.c,
+		xcDisplayFunc.c, xcAppInit.c, loadValues.c, menu.tcl
+
+Tue Jul 27 2004 Anton Kokalj (tone.kokalj@ijs.si)
+	* implementation of display of Fermi Surfaces of all selected
+		bands in one place, i.e., a display called "Merged Bands". New
+		files: cryDispFuncMultiFS.c, FS_Multi.tcl.
+	* fixing a bug for Fermi surface display: for odd k-meshes Fermi
+		surfaces have been shited for one mesh-point. Files
+		adapted: fs.c, crySurf.c, lcasif.c. Thanks to Pablo de la
+		Mora for his useful examples.
+
+Fri Jul 23 2004 Anton Kokalj (tone.kokalj@ijs.si)
+	* ginp.awk: adding support for CRYSTAL03's OPTCOORD keyword
+		(problem reported by Mauro Causa)
+
+Fri Jul 23 2004 Anton Kokalj (tone.kokalj@ijs.si)
+	* xsfAnim.tcl: bug in the variable-cell XSF parser (reported by
+		Himanshu)
+
+Tue Jul 13 2004	 Anton Kokalj (tone.kokalj@ijs.si)
+	* readstr.c: fixing routine parsePDBAtomRecord for atom-namess
+		starting with letter 'A' (bug reported by Ole Wieckhorst)
+
+Tue Jun 29 2004	 Anton Kokalj (tone.kokalj@ijs.si)
+	* scripting.tcl: correcting a typo for printing the EPS or PS file
+		(bug reported by Rudolph Magyar)
+
+Fri Jun 04 2004  Anton Kokalj (tone.kokalj@ijs.si)
+	* FS_Main.tcl: the size of the toplevel display window for
+		Fermi-surface was almost zero. Trying to fixing the
+		problem. Not yet completely done.
+
+Thu May 06 2004  Anton Kokalj (tone.kokalj@ijs.si)
+	* atoms.h: correcting the Si covalent radius to 1.11 Angstroms
+
+Sat Apr 10 2004  Anton Kokalj (tone.kokalj@ijs.si)
+	* adding image-buttons for selecting unit of repetition on the
+		bottom toolbar of the Viewer
+	* writeXSF.c: fixing bug in _writeMolecule() function. Adding
+		(mx,my,mz) vector to atomic coordinates
+
+Fri Apr 09 2004  Anton Kokalj (tone.kokalj@ijs.si)
+	* popupMenu.tcl: fixed bug in popupMenu:popup due to wrong call to
+		mainMenu proc (help-menubutton argument was missing) (bug
+		reported by Verfaillie Eric)
+
+Fri Apr 02 2004  Anton Kokalj (tone.kokalj@ijs.si)
+	* addind make.include file where the TCL_VER2 and
+		TCL_VER3 are defined for convinience
+	* replacing the Tcl/Tk 8.3.3 sources with Tcl/Tk 8.4.6 sources (on
+		MACOSX Tcl/Tk 8.3.3 makes some problems)
+	* COMPILE_LIBRARY Makefile variable split to COMPILE_TCLTK and
+		COMPILE_MESA
+
+Thu Apr 01 2004  Anton Kokalj (tone.kokalj@ijs.si)
+	* xcAppInit.c: defining xcrys(plaform) Tcl variable (allowed
+		values: unix|cygwin|macosx)
+	* xcInit.tcl: on macosx the "." window is not iconified/deiconified
+	* gl2ps.h: chancning "#include <malloc.h>" to "#include <stdlib.h>"
+
+Mon Mar 29 2004  Carlo Sbraccia (sbraccia@sissa.it)
+	* pwo2xsf_opt.awk, pwo2xsf_anim.awk: parsing fix for
+		spin-polarized calculation
+
+Mon Mar 29 2004  Anton Kokalj (tone.kokalj@ijs.si)
+	* porting xcrysden's CRYSTAL interface for CRYSTAL03. Several
+		files were adapted: xcInitLib.tcl, xcInit.tcl,
+		check_package.tcl, gengeom.tcl, propInit.tcl, bwid.tcl,
+		advGeom2.tcl, advGeom.tcl, runC95.tcl, read25.tcl,
+		dos.tcl, propC95.tcl, isoControl.tcl, isoRender.tcl,
+		grid.tcl, xcIsoSurf.c, readisodata.c, struct.h.  *
+		xcrysden: adding -m option for valgrind, i.e., memory
+		checking utility * readisodata.c: fixing a memory leak in
+		routine ReadBlock0
+	(initialization of plvertex)
+	* usage: updating usage description
+
+Mon Mar 22 2004 Anton Kokalj (tone.kokalj@ijs.si)
+	* pwi2xsf.f: improving pwi2xsf filter: (i) for case ibrav==0 &&
+		celldm(1)==0, and (ii) coorect parsing of "{bohr}"-kind of strings
+	* adding files Make.macosx-aqua, Make.macosx-x11,
+		Make.macosx-x11.README for compilation on MACOSX (provided by Mike
+		Ford, University of Technology, Sydney)
+
+Wed Mar 17 2004 Anton Kokalj (tone.kokalj@ijs.si)
+	* pwKPath.f: writing small program for generating the PWscf formatted k-list
+	* kPath.tcl: adapting file  for the PWscf k-list format
+	* romoving xcMaybeDestroyLists function (was no more needed)
+
+Fri Mar 05 2004 Anton Kokalj (tone.kokalj@ijs.si)
+	* deleting xcMaybeDelete3DLists function (was no more needed)
+	* C/Makefile: fixing compile target for xsf2xsf (removing TCL_LIB)
+	* menu.tcl: fixing small typos related to cygwin changes (shell
+		filters for openExtStruct)
+
+Thu Mar 04 2004 Anton Kokalj (tone.kokalj@ijs.si)
+	* xcrysden finally works reasonable under WIN32/CYGWIN. This
+		requires a wrapper pwd.sh that substitutes a Tcl "pwd" command, among other things ...
+	* atomLabels.tcl: disabling "Font" button for windows, as
+		font-browser does not work there
+	* fixing akward behavior reported by Enrique Batista upon
+		reopening an isosurface control window
+
+Wed Mar 03 2004 Anton Kokalj (tone.kokalj@ijs.si)
+	* bwid.tcl: fix for reading the band-widths (emply lines are skipped now)
+	* cleaning the Tcl "exec" code, executing scripts as "exec sh script" (needed for CYGWIN)
+	* writeXSF.c, function _writeMolecule(): fixing for-loop over atoms
+	* Makefile: fixing small typo, target: _sys2
+	* addOption:parse: fixing small bug for .title window (happens
+		when supplying an unknown option)
+	* Tcl: renaming: xcCatchExec -> xcCatchExecReturn, and adding a	few new routines
+
+Mon Mar 01 2004 Anton Kokalj (tone.kokalj@ijs.si)
+	* new welcome window
+	* maximum number of bands for Fermi surface increased from 50 to
+		5000 (struct.h: DATAGRID_MAXSUBINDEX)
+	* ReadBandGrid(): fixing initialization of grid->maxvalue[ib]
+	* adding Help-->about menu entry
+
+Sat Feb 27 2004 Anton Kokalj (tone.kokalj@ijs.si)
+	* Fermi-surface: increasing the maximum number of bands from 50 to
+		5000 (see DATAGRID_MAXSUBINDEX in struct.h)
+	* ReadBandGrid(): grid->maxvalue[ib] was wrongly determined
+	* BXSF: band-selection for --bxsf option
+	* Fermi-surface: display of band-widths in text-widget
+	* FS_Main.tcl: added check for zero-selected bands
+	* adding files: bandwidths.tcl and bandselect.tcl
+	* improving README file
+
+Fri Feb 26 2004 Anton Kokalj (tone.kokalj@ijs.si)
+	* xcSelect.c: fix of viewport in selection mode (no more cropping)
+	* saveState.tcl: fix for saving a scalar-field
+
+Thu Feb 25 2004 Anton Kokalj (tone.kokalj@ijs.si)
+	* pwo2xsf_old.sh: fixing small bug for -a option for PWscf-output version 1.2
+	* auxil.tcl: adding putsFlush routine (puts+flush)
+
+Wed Feb 25 2004 Anton Kokalj (tone.kokalj@ijs.si)
+	* porting XCRYSDEN to WIN32 under cygwin
+	* CYGWIN: several files were patched
+	* CYGWIN: some new files were added: C/*.cygwin, system/Make.cygwin
+	* CYGWIN: a xcrys.dll is build instead of xcrys, the library loaded from xcInit.tcl
+	* CYGWIN: auxil.tcl/proc WriteFile: $fID -translation {auto lf}
+	* CYGWIN: auxil.tcl/proc xcTkFontName2XLFD: don't query XLFD fontName
+	* CYGWIN: Viewer.tcl&ptable.tcl: widths of some buttons adjusted
+	* scriptingFilter.tcl: I/O filters for PWscf: no more itypNatList reuired for version > 1.2
+	* tests moving tests from sys_utils/tests/ to tests/
+	* adding tests for PWscf
+	* auxil.tcl: adding a few evalIn* procs
+
+Fri Feb 20 2004 Anton Kokalj (tone.kokalj@ijs.si)
+	* convexhull.f: adding normalization for normal(*)
+	* auxil.f: adding normalize_vec routine
+
+Thu Feb 19 2004 Anton Kokalj (tone.kokalj@ijs.si)
+	* forces.c, xcForces.c: visualization of zero-length forces fixed
+	* xcviewport.c: fixing "zooming" bug: sometimes the structure has disappeared when zoomed too much
+	* ChangeLog: the beginning of the ChangeLog
+
+ChangeLog ends here

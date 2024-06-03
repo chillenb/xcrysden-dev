@@ -1,0 +1,57 @@
+NOTE: It is the easiest to compile the shared version of xcrysden,
+because it is more easy to install library dependencies with a package
+manager system, such as apt or dnf, then to compile needed libraries
+from sources.
+
+The compilation of xcrysden requires several development versions of
+libraries, in particular:
+
+----------------------------------------------------------------------------
+** To compile SHARED version of xcrysden the following libraries are needed:
+----------------------------------------------------------------------------
+
+libx11-dev
+libxmu-dev
+tcl8.6-dev
+tk8.6-dev
+mesa-common-dev
+libglu1-mesa-dev
+libtogl-dev
+libfftw3-dev
+
+N.B.: these are Debian package names. On Debian based distributions,
+they can be installed as:
+
+sudo apt install libx11-dev libxmu-dev tcl8.6-dev tk8.6-dev mesa-common-dev libglu1-mesa-dev libtogl-dev libfftw3-dev
+
+NOTE FOR OTHER LINUX-DISTROS: first google for the correponding
+package names and then install them with the correponding package
+manager (e.g. "dnf" for Fedora based distros).
+
+
+------------------------------------------------------------------------
+** To compile SEMISHARED version of xcrysden one needs:
+------------------------------------------------------------------------
+
+libx11-dev
+libxmu-dev
+pkg-config
+libxrandr-dev
+llvm-dev
+libelf-dev
+
+N.B.: these are Debian package names that can be install via "apt
+install" on Debian based distributions.
+
+
+----------------------------------------------------------------------------
+** To use SHARED version of xcrysden the following libraries are needed:
+----------------------------------------------------------------------------
+
+
+libxmu6
+tk8.6
+libglu1-mesa
+libtogl2
+libfftw3-3
+libgfortran5

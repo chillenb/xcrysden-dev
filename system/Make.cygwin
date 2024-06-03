@@ -1,0 +1,58 @@
+#########################################################################
+#
+# System-dependent definitions CYGWIN.
+#
+# EDIT ACCORDING TO YOUR OWN NEEDS !!!
+#
+########################################################################
+
+MAKE   = make 
+CYGWIN = -f Makefile.cygwin
+
+#------------------------------------------------------------------------
+# compilers & flags
+#------------------------------------------------------------------------
+CC          = cc -g 
+SHARED      = -shared
+CFLAGS      = -O2 
+#-mno-cygwin
+#-mcygwin 
+
+CPPFLAGS    = -DCYGWIN -DWIN32 -DUSE_FONTS -DNEAR_BUG 
+LDLIB       = 
+MATH        =
+
+FC          = g77 -O2
+# -mcygwin
+FFLAGS      = 
+
+#------------------------------------------------------------------------
+# Libraries and include files
+#------------------------------------------------------------------------
+X_LIB       =
+# -L/usr/X11R6/lib -lX11.dll
+X_INCDIR    =
+
+
+TCL_PREFIX   = /usr
+TCL_VER      = 84
+TCL_LIB      = -L$(TCL_PREFIX)/lib -ltcl$(TCL_VER) -ltclstub$(TCL_VER) 
+TK_LIB       = -ltk$(TCL_VER) -ltkstub$(TCL_VER)
+TOGL_LIB     = -lTogl$(TOGL_VER)
+GLU_LIB      = -lglu32
+GL_LIB       = -lopengl32 -lgdi32
+FFTW3_LIB    = -lfftw3
+# this is only used for some testing purposes
+#MESCHACH_LIB = 
+
+TCLTK_SRC   = /usr/src/tcltk-20080420-1
+# on some machines this is needed: -I$(TCLTK_SRC)/tk/xlib
+TCL_INCDIR      = -I$(TCLTK_SRC)/tcl/generic -DUSE_TCL_STUBS
+TK_INCDIR       = -I$(TCLTK_SRC)/tk/generic  -I$(TCLTK_SRC)/tk/win/ -DUSE_TK_STUBS -I$(TCLTK_SRC)/tk/xlib
+TOGL_INCDIR     =
+GL_INCDIR       = -I/usr/include/opengl
+FFTW3_INCDIR    =
+# this is only used for some testing purposes
+#MESCHACH_INCDIR =
+
+#------------------------------------------------------------------------

@@ -1,0 +1,145 @@
+## do not edit changes will be lost (file automatically generated)
+
+SYNOPSIS
+       xcrysden [special-options]
+       xcrysden [special-options] format-options file|directory
+
+DESCRIPTION
+       XCrySDen  is a crystalline and molecular structure visualisation program, which aims at display of isosurfaces and contours, which can be superimposed
+       on crystalline structures and interactively rotated and manipulated.
+
+SPECIAL OPTIONS
+       -h
+       --help
+           Display help message.
+
+       -v
+       --version
+           Display program version information.
+
+       -u id
+       --use id
+           Load XCrySDen embedded into container window with window-ID=id.
+
+       -r dim
+       --reducedim dim
+           Reduce periodic dimension of XSF file to dim. Must be specified before --xsf option, e.g., xcrysden -r 2 --xsf file.
+
+       -c file
+       --custom file
+           Load custom-definitions from a specified file (the syntax is that of ~/.xcrysden/custom-definitions).
+
+       -a file
+       --attributes file
+           Load attributes from file. The format of the attributes file is the following:
+
+                   ELEMENTCOLOR
+                   atomic-number1   red1 blue1 green1
+                   atomic-number2   red2 blue2 green2
+                   ...
+                   ELEMENTRADIUS
+                   atomic-number1   radius1
+                   atomic-number2   radius2
+                   ...
+
+       -l file
+       --lights file
+           Load lights parameters from XCrySDen's lights formatted file.
+
+FORMAT OPTIONS
+       --xsf file
+           Load structure from XCrySDen's-Structure-File (XSF) formatted file.
+
+       --animxsf file
+       --axsf file
+           Load structures from Animated-XCrySDen's-Structure-File (AXSF) formatted file.
+
+       --bxsf file
+           Load bands from BXSF (Band-XSF) file and visualize Fermi Surface.
+
+       --xmol file
+       --xyz file
+           Load structure from XYZ formatted file.
+
+       --pdb file
+           Load structure from PDB formatted file.
+
+       --gzmat file
+           Load structure from Gaussian Z-matrix (requires Open-Babel program).
+
+       --gaussian_out file
+       --gxx_out file
+       --g98_out file
+           Load structure from Gaussian output file. Only single point calculation and optimization run is supported so far. For the optimization run  it  is
+           possible to render all the structures that were produced during the run.
+
+       --cube file
+       --gXX_cube file
+       --g98_cube file
+           Load  structure  from  Gaussian cube file. The cube file should be produced with the Cube=Cards option. Only scalar cube files are supported, that
+           is, Cube=(Cards,Density) or Cube=(Cards,Orbitals) or Cube=(Cards,Potential). Refer to GAUSSIAN manual for the meaning of this keywords.
+
+       --orca_out file
+           Load structure(s) from Orca output file. Only Geometry optimization outputs were tested so far.
+
+       --crystal_inp file
+           Load structure from CRYSTAL (http://http://www.crystal.unito.it/) input file.
+
+       --crystal_f9 file
+           Load structure from CRYSTAL (http://http://www.crystal.unito.it/) fortran unit 9.
+
+       --wien_struct filehead|file|directory
+           Load structure from WIEN2k (http://www.wien2k.at/) struct-file, where:
+
+               filehead = name of struct file without .struct extension,
+               file = filename,
+               directory = name of case directory.
+
+       --wien_kpath directory|struct-file
+           Read struct file and render first Brillouin zone with special k-points. K-path can be selected interactively  by  mouse-clicking  the  special  k-
+           points.  User must specify EMIN and EMAX energies and total number of k-points along the path. This number is merely an estimation of total number
+           of k-points, since XCrySDen tries to get very uniform sampling of k-points along the path (don't specify  WIEN2k  maximum  allowed  number  of  k-
+           points, since XCrySDen maight generate few points more).
+
+       --wien_renderdensity directory
+           Read struct, output, and rho files and renders crystalline structure and precomputed charge density.
+
+       --wien_density direcory
+           Either  2D  or  3D region for charge density calculation is interactively chosen by mouse-clicking. XCrySDen generates in5 file(s), calculates and
+           renders charge density either as isolines/colorplanes (2D) or isosurfaces (3D).
+
+       --wien_fermisurface directory
+           Pop-up a task window for Fermi surface creation.  After several steps the Fermi surface is (hopefully) drawn as 3D isosurface.
+
+       --fhi_inpini file
+           Load structure from FHI98MD inp.ini formatted file.
+
+       --fhi_coord file
+           Load structure from FHI98MD coord.out formatted file.
+
+       --pwi
+       --pw_inp file
+           Load structure from pw.x input file. pw.x is a  pseudopotential  planewave  program  of  the  Quantum-ESPRESSO  distribution  (http://www.quantum-
+           espresso.org/).
+
+       --pwo
+       --pw_out file
+           Load  structure  from  pw.x  output  file.  pw.x  is a pseudopotential planewave program of the Quantum-ESPRESSO distribution (http://www.quantum-
+           espresso.org/).
+
+       -s script
+       --script script
+           Load script from file containing Tcl script.
+
+       --os script
+       --oldscript script
+           Load old-formatted script (prior to xcrysden-1.6) from file.
+
+       --print filename
+           Print the displayed structure to a file and exit. This is useful within the shell scripts to achieve "automatic" printing.
+
+           Example: xcrysden --xsf file.xsf --script state.xcrysden --print file.png
+
+           In this example "--xsf file.xsf" loads the structure from XSF file, "--script state.xcrysden" setups a desired display (such a script is typically
+           created via File-->Save Current State menu option) and "--print file.png" prints the displayed structure to a file and exits xcrysden.
+

@@ -1,0 +1,143 @@
+In this directories are the example files that one can use to explore
+the capabilities of XCrySDen program. The structure of this directory
+is as follows:
+
+
+===========================================================================
+   Subdirectory                 Explanation
+---------------------------------------------------------------------------
+./CRYSTALxx_input_files/        CRYSTAL95/98 input files
+./FHI98MD_files/                FHI98MD coord.out and inp.ini files
+./FermiSurface/                 Band XSF file for Fermi surface visualization
+./GAUSSIAN_files/               Gaussian98 Input, Output, and Cube files
+./PDB/                          PDB formated structure files
+./PWSCF_files/                  PWSCF input and output files
+./Scripting/                    XCRYSDEN's scripting examples
+./WIEN_struct_files/            WIEN struct files
+./XYZ/                          XYZ formated structure files
+./XSF_Files/                    XSF (i.e. XCrySDen's Structure File) formated files
+===========================================================================
+
+
+Here is "ls -R" listing of files (with some explanation for XSF):
+
+
+./CRYSTALxx_input_files:
+Pt322.r1
+Pt_fcc.r1
+ZnS.r1
+argonite.r1
+calcite.r1
+chabazite.r1
+cluster.r1
+corundum.r1
+cuprite.r1
+graphite.r1
+mgo.r1
+polymer.r1
+pyrite.r1
+rutile.r1
+urea.r1
+zro2.r1
+
+
+./FHI98MD_files:
+GaAsSurface_coord.out
+GaAsSurface_inp.ini
+GaAs_inp.ini
+
+
+./FermiSurface:
+RhBulkFcc.bxsf.gz
+MgB2.bxsf.gz
+
+
+./GAUSSIAN_files:
+N2O_homo+lumo.cube.gz
+benzene-6CH3-OCH3.g98
+benzene.g98_out
+
+
+./PDB:
+bucky.pdb
+cluster.pdb
+mol2.pdb
+
+
+./PWSCF_files:
+EthAl001-2x2.inp
+EthAl001-2x2.out
+
+
+./Scripting:
+ZnS_molsurf.xcrysden
+animation.tcl
+atomic_labels.tcl
+build_crystal.tcl
+colorplane_animation.tcl
+contours.tcl
+g98cube.tcl
+isosurface+colorplane+print.tcl
+movie.tcl
+multiScript.tcl
+
+
+./WIEN_struct_files:
+a-quartz.struct
+al2o3.struct
+b12.struct
+bi.struct
+cab6.struct
+cd16te15sb.struct
+cd8te7sb.struct
+coo.struct
+cos2.struct
+cr2o3.struct
+crb2.struct
+fe2p.struct
+fe4n.struct
+fecl2.struct
+fef2.struct
+ferrocen.struct
+gaas.struct
+in2o3.struct
+mos2.struct
+pt.struct
+si111.struct
+tellur.struct
+ybco7.struct
+yfe2.struct
+
+
+./XYZ:
+anim.xyz
+bucky.xyz
+mol1.xyz
+mol2.xyz
+
+
+./Xcrysden_Structure_Files:
+1.xsf             	...	MOLECULAR #1 structure
+1symb.xsf
+2.xsf                 	...	MOLECULAR #2 structure
+ANIM.axsf.gz            ...     XSF animation file + forces     
+ANIMsymb.axsf
+CO_homo.xsf.gz          ...     CO molecule + HOMO orbital
+CO_lumo.xsf.gz          ...     CO molecule + LUMO orbital
+GaAsH.xsf               ...     H adsorbed on GaAs surface
+README                  ...     explanation of XSF file format
+ZnS.xsf                 ...     ZnS.xsf fcc CRYSTAL structure
+ZnS_variable-cell.axsf  ...     XSF variable-cell animation file (stupid example)
+bucky.xsf             	...	bucky-ball structure
+c2h4:Ag001.xsf		...	ethylene adsorbed on Ag(001) (superslab model)
+fcc-410-1x1.xsf         ...     an fcc-(410) surface
+mol-urea.xsf.gz         ...     urea molecule + 3D CHARGE DENSITY
+mol-urea2D.xsf          ...     urea molecule + 2D CHARGE DENSITY
+oxirane_homo.xsf.gz     ...     oxirane molecule + HOMO ORBITAL
+zro2cluster.xsf         ...     ZrO_2 cluster
+vector_field.xsf        ...     small molecule + vector field 
+
+****
+NOTE: 
+to view charge density (molecular orbitals) for a few *.xsf examples
+load the file and go to "Tools->(Data Grid) menu.

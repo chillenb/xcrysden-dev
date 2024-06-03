@@ -1,0 +1,90 @@
+pager=${pager:-more}
+$pager <<EOF
+
+	* First copy an appropriate system/Make.* to ./Make.sys
+	  and edit it according to your needs, i.e:
+
+		\$ cp system/Make.MY_SYSTEM Make.sys
+
+	* Then to compile the package type:  
+ 
+		\$ make all
+
+          If everything compiled well, xcrysden should work. You can try: ./xcrysden
+          
+	* Optionally you may do:
+
+		\$ prefix=XXXX make install
+                
+          where XXXX is a directory where to install xcysden. BEWARE:
+          please read first the below description of "install" target
+          before issuing this command.
+
+
+ ==============================================================================
+               * * * Here is a list of make targets * * *
+ ==============================================================================
+
+Usage: make  all | clean | clean-external-src
+
+    --
+    all:
+
+	all = bindir + tcl + tk + togl + mesa + fftw + xcrysden
+
+	The "make all" simply makes all. That is: compiles all the
+	source files and creates the executables.
+
+	If external/src/ subdirectory exists, then it also downloads and
+	compiles all the external libraries (Tcl/Tk, Togl, Mesa,
+	FFTW), which were requested for compilation by
+	COMPILE_package=yes variable in Make.sys.
+
+    --
+    install:
+
+	Installs the compiled package systemwide to a
+	\$prefix/share/xcrysden-version/ and
+	\$prefix/lib/xcrysden-version/ directories and makes xcrysden
+	wrapper in \$prefix/bin/. The default value of \$prefix is
+	/usr/local, but this can be changed by running as:
+
+	"prefix=XXXX make install".        
+
+        BEWARE: assumes that Tcl/Tk/Togl/GL/GLU/FFTW libraries are
+	available system-wide (i.e. it will not install the internally
+	complied libraries that reside in external/lib subdirectory).
+	
+    --
+    clean | veryclean | distclean:
+
+	Various levels of cleaning.
+
+    ------------------------------------------------------------------------
+
+
+  The following targets are suitable only for developers, for making
+  various package distributions:
+
+    --
+    srcdist:
+	Creates the source tar.gz package-archive.
+
+    --
+    bindist-shared:
+	Creates the shared binary tar.gz package-archive. Note: you should
+        previously compile the xcrysden package.
+
+    --
+    bindist-semishared:
+	Creates the shared binary tar.gz package-archive with the Tcl, Tk, 
+        and Mesa shared libraries in external/lib subdirectory. Note: you should
+        previously compile the xcrysden package with the internally compiled
+        Tcl/Tk/Togl/GL/GLU/FFTW libraries that reside in external/lib subdirectory.
+
+    --
+    bindist-static:
+	Creates the statically linked binary tar.gz package-archive. Note: 
+	you should previously compile the xcrysden package and link it with 
+	static libraries.
+EOF

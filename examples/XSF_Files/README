@@ -1,0 +1,77 @@
+For the descriptions of files see file ../README
+
+*******************************
+Short description of XSF format
+*******************************
+
+_______________________________________________________________________________
+0.) All coordinates in XSF files are in ANGSTROMS.
+
+_______________________________________________________________________________
+1.) All keywords must begin on second column.
+
+_______________________________________________________________________________
+2.) For MOLECULES the XSF format is very simple. The first line begins
+    with ATOMS keyword and then one specifies the atomic data like
+    atomic-number, Xcoor, YCoor, Zcoor. 
+
+    Example:
+
+ ATOMS
+     6    2.325243   -0.115261    0.031711
+     1    2.344577   -0.363301    1.077589
+     9    3.131708   -0.909527   -0.638930
+     9    2.736189    1.130568   -0.134093
+     8    1.079338   -0.265162   -0.526351
+     6    0.007719   -0.041269    0.244204
+     9    0.064656    1.154700    0.824420
+     9   -0.042641   -0.911850    1.255074
+     8   -1.071578   -0.152842   -0.539134
+     6   -2.310374    0.036537    0.022189
+     1   -2.267004    0.230694    1.077874
+     9   -2.890949    1.048938   -0.593940
+     9   -3.029540   -1.046542   -0.203665
+
+_______________________________________________________________________________
+3.) For CRYSTAL-STRUCTURES the file begin with CRYSTAL or SLAB or POLYMER 
+    keyword, depending on the dimensionality of the system (3-crystals, 
+    2-slabs, 1-polymers). Then one needs to specify PRIMVEC/PRIMCOORD 
+    keywords and optionally CONVVEC keyword. See example:
+
+    Example:
+
+ CRYSTAL                                                 see -1>
+ PRIMVEC
+    0.0000000000    2.7100000000    2.7100000000         see -2>
+    2.7100000000    0.0000000000    2.7100000000
+    2.7100000000    2.7100000000    0.0000000000
+ CONVVEC
+    5.4200000000    0.0000000000    0.0000000000         see -3>
+    0.0000000000    5.4200000000    0.0000000000
+    0.0000000000    0.0000000000    5.4200000000
+ PRIMCOORD
+ 2 1                                                     see -4>
+ 16      0.0000000000     0.0000000000     0.0000000000  see -5>
+ 30      1.3550000000    -1.3550000000    -1.3550000000
+
+    Legend:
+    ------
+    -1> specify the structure is CRYSTAL 
+        (other possibilities are SLAB, POLYMER)
+
+    -2> specification of PRIMVEC (in ANGSTROMS) like:
+            ax, ay, az (first  lattice vector)
+            bx, by, bz (second lattice vector)
+            cx, cy, cz (third  lattice vector)
+
+    -3> specification of CONVEC (see -2>)
+
+    -4> First number stands for number of atoms in primitive cell (2 in
+        this case). Set the second number always to one !!!
+
+    -5> Specification of atoms in primitive cell (same as for ATOMS).	
+    
+_______________________________________________________________________________
+4.) Specification of 2D or 3D scalar-field (called as DATAGRID):
+
+    see file XCRYSDEN WEB page, file XSF.html !!!

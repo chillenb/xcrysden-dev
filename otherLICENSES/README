@@ -1,0 +1,30 @@
+XCrySDen uses some external software. 
+
+
+The following is embedded into its C source code:
+=================================================
+
+
+1.) Togl     (see Togl:LICENSE)
+2.) GL2PS    (see GL2PS:LICENSE)
+
+
+while the following may also be present in external/ directory:
+===============================================================
+
+1.) Tcl/Tk   (see TclTk:LICENSE)
+2.) Mesa     (see Mesa:LICENSE)
+3.) BWidgets (see BWidget:LICENSE)
+4.) FFTW3    (see FFTW3:LICENSE)
+5.) Meschach (see Meschach:LICENSE) (in rare cases, testing only)
+
+The LICENSES for above software are stored in this direcory under the
+names:
+
+<software>:LICENSE
+
+In addition some C routines for polygonizing the scalar field are
+based-on/derived-from routines of Paul Bourke (http://paulbourke.net)
+and are used with his permission.
+
+Anton Kokalj, Mon Mar 12 2012

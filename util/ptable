@@ -1,0 +1,25 @@
+#!/bin/sh
+# \
+#this line restarts wish \
+exec wish "$0" "$@" > /dev/null
+
+set script [info script]
+while { [file type $script] eq "link" } {
+    set script [file readlink $script]
+}
+
+set dir [file dirname [file normalize $script]]
+#
+# INITIALIZATION
+#
+set system(PWD)     [pwd]
+set system(TOPDIR)  [file normalize [file join $dir ..]]
+if { [info exists env(XCRYSDEN_SCRATCH)] } {
+    set system(SCRDIR) $env(XCRYSDEN_SCRATCH)
+} else {
+    set system(SCRDIR) /tmp
+}
+source $system(TOPDIR)/Tcl/xcInitLib.tcl 
+
+set ptable(ptable_script) 1
+ptable .

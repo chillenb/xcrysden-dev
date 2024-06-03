@@ -1,0 +1,335 @@
+#!/bin/sh -f
+
+##############################################################################
+# Author:                                                                    #
+# ------                                                                     #
+#  Anton Kokalj                                   Email: Tone.Kokalj@ijs.si  #
+#  Department of Physical and Organic Chemistry   Phone: x 386 1 477 3523    #
+#  Jozef Stefan Institute                           Fax: x 386 1 477 3822    #
+#  Jamova 39, SI-1000 Ljubljana                                              #
+#  SLOVENIA                                                                  #
+#                                                                            #
+#  Copyright (c) 1996--2019 by Anton Kokalj                                  #
+##############################################################################
+
+# set locales to C
+LANG=C 
+LC_ALL=C
+export LANG LC_ALL
+
+unset MALLOC_CHECK_; # Lorenzo's suggestion !
+
+XLIB_SKIP_ARGB_VISUALS=1
+export XLIB_SKIP_ARGB_VISUALS; # Martin's Kroeker suggestion
+
+
+if test "x`which readlink`" = "x"; then
+    # no readlink cmd; make a function-substitute
+    readlink_f() {
+        file=`ls -l "$1" | awk '{print $NF}'`
+        while test -h "$file"; do
+            file=`ls -l "$file" | awk '{print $NF}'`
+        done
+        echo $file
+    }
+else
+    readlink_f() {
+        readlink -f "$1"
+        if test $? -gt 0; then
+            # seems readlink does not support -f option
+            file=`readlink "$1"`
+            while test -h "$file"; do
+                file=`readlink "$file"`
+            done
+            echo $file    
+        fi
+    }
+fi
+
+
+pathname() {
+    file=`which "$1"`    
+    if test $? -gt 0; then
+        file=`type "$1"`
+	if test $? -gt 0; then
+	    # give-up
+	    file="$1"
+        else
+            file=`echo $file | awk 'BEGIN {FS="is "} {print $NF}'`
+        fi
+    fi
+    echo $file
+}
+
+
+pathdir() {
+    file=`pathname "$1"`
+    
+    while test -h "$file"; do
+	file=`readlink_f "$file"`
+    done
+
+    dir=`dirname "$file"`
+    ( cd $dir; pwd )
+}
+
+is_writeable() {
+    # check if the directory exist and is writeable
+    result=0
+    if test -d "$1"; then
+	if test -w "$1"; then
+	    result=1
+	fi
+    fi
+    echo $result
+}
+
+if test -z "$XCRYSDEN_TOPDIR"; then
+    # XCRYSDEN_TOPDIR does not exists, guess it from the process
+    export XCRYSDEN_TOPDIR=`pathdir "$0"`
+fi
+
+
+if test -z "$XCRYSDEN_SCRATCH"; then
+
+    # XCRYSDEN_SCRATCH does not exist, find a suitable place
+
+    tmp=/tmp    
+    for dir in $TEMP $TMP $TEMPDIR $TMPDIR
+    do
+	if test ! -z "$dir"; then
+	    if test `is_writeable "$dir"`; then
+		tmp=$dir
+	    fi
+	fi
+    done
+
+    export XCRYSDEN_SCRATCH=$tmp
+fi
+
+if test \( "$1" = "-h" \) -o \( "$1" = "--help" \) ; then
+    cat "$XCRYSDEN_TOPDIR/usage" | awk 'BEGIN {lprint=0;} /a*/ { if (lprint) print; } /## do not edit/ { lprint=1; }'
+    exit 0
+fi
+
+
+ver=`cat "$XCRYSDEN_TOPDIR/version"`
+
+
+if test \( "$1" = "-v" \) -o \( "$1" = "--version" \) ; then
+    echo "XCrySDen version: $ver"
+    exit 0
+fi
+
+
+# ------------------------------------------------------------------------
+# parse the following options: -d -t -T
+# ------------------------------------------------------------------------
+valgrind=0
+debug=0
+USE=""
+for opt in "$@"
+  do
+  case $opt
+      in
+      -d|--debug)     debug=1; shift;;
+      -m|--valgrding) valgrind=1; shift;;
+      -t|--trace)     XCRYSDEN_TRACE=1; export XCRYSDEN_TRACE; shift;;
+      -T|--fulltrace) XCRYSDEN_FULLTRACE=1; export XCRYSDEN_FULLTRACE; shift;;
+      -u|--use)       shift; USE="-use $1"; shift;;
+  esac
+done      
+
+
+if test \( $debug -eq 1 \) -a \( $valgrind -eq 1 \) ; then
+    echo "
+XCRYSDEN: cannot use \"-d\" and \"-m\" options simultaneously !!!
+"
+    exit 1
+fi
+
+if test ! -d "$XCRYSDEN_SCRATCH" ; then
+    mkdir "$XCRYSDEN_SCRATCH"
+fi
+
+#
+# handle STDIN !!!
+#
+if test \( $# -eq 1  \) -a  \( "$1" = "-" \) ; then
+    #
+    # read XSF from stdin
+    #
+    cat - > "$XCRYSDEN_SCRATCH/STDIN.$$"
+    ARGS="--xsf $XCRYSDEN_SCRATCH/STDIN.$$"
+elif test \( $# -eq 2 \) -a \( "$2" = "-" \) ; then
+    #
+    # read from STDIN (all formats)
+    #
+    cat - > "$XCRYSDEN_SCRATCH/STDIN.$$"
+    ARGS="$1 $XCRYSDEN_SCRATCH/STDIN.$$"
+fi
+
+echo "
++-----------------------------------------------------------------+
+|*****************************************************************|
+|*                                                               *|
+|*  XCrySDen -- (X-Window) CRYstalline Structures and DENsities  *|
+|*               =         ===         =              ===        *|
+|*---------------------------------------------------------------*|
+|*                                                               *|
+|*    Anton Kokalj (tone.kokalj@ijs.si)                          *|
+|*    Jozef Stefan Institute, Ljubljana, Slovenia                *|
+|*                                                               *|
+|*    Copyright (c) 1996--2019 by Anton Kokalj                   *|
+|*                                                               *|
+|*****************************************************************|
++-----------------------------------------------------------------+
+
+  Version: $ver
+
+  Please report bugs to: tone.kokalj@ijs.si
+
+
+  TERMS OF USE:
+  -------------
+  XCRYSDEN is released under the GNU General Public License.
+
+  Whenever graphics generated by XCRYSDEN are used in scientific
+  publications, it shall be greatly appreciated to include an explicit
+  reference. The preferred form is the following:
+
+  [ref] A. Kokalj, J. Mol. Graph. Model., Vol. 17, pp. 176-179, 1999.
+        Code available from http://www.xcrysden.org/.
+"
+
+#
+# create SIGNAL HANDLER
+#
+. "$XCRYSDEN_TOPDIR/scripts/xcLib.sh"
+trap 'xcSignalHandler XCrySDen 1'  1
+trap 'xcSignalHandler XCrySDen 2'  2
+trap 'xcSignalHandler XCrySDen 3'  3
+trap 'xcSignalHandler XCrySDen 15' 15
+
+if test -d "$XCRYSDEN_TOPDIR/external/lib" ; then
+    if test -z "${LD_LIBRARY_PATH}"; then
+	LD_LIBRARY_PATH="$XCRYSDEN_TOPDIR/external/lib"
+    else
+	LD_LIBRARY_PATH="$XCRYSDEN_TOPDIR/external/lib:$LD_LIBRARY_PATH"
+    fi
+    export LD_LIBRARY_PATH
+
+
+    if test -z "${DYLD_LIBRARY_PATH}"; then
+	DYLD_LIBRARY_PATH="$XCRYSDEN_TOPDIR/external/lib"
+    else
+	DYLD_LIBRARY_PATH="$XCRYSDEN_TOPDIR/external/lib:$DYLD_LIBRARY_PATH"
+    fi
+    export DYLD_LIBRARY_PATH
+fi
+
+for tcl_version in 8.6 8.5 8.4;
+do
+    if test -f "$XCRYSDEN_TOPDIR/external/lib/tcl$tcl_version/init.tcl" ; then
+	export TCL_LIBRARY=$XCRYSDEN_TOPDIR/external/lib/tcl$tcl_version
+	echo "TCL_LIBRARY=$TCL_LIBRARY"
+	break
+    fi
+done
+
+#### 
+if test ! -z "$XCRYSDEN_LIB_BINDIR"; then
+    XCRYSDEN_XCRYS_DIR=$XCRYSDEN_LIB_BINDIR
+else
+    XCRYSDEN_XCRYS_DIR=$XCRYSDEN_TOPDIR/bin
+fi
+####
+
+if test $debug -eq 1; then
+    ldd "$XCRYSDEN_XCRYS_DIR/xcrys"
+fi
+
+printenv | grep XCRYSDEN_TOPDIR
+printenv | grep XCRYSDEN_SCRATCH
+echo ""
+
+if test $valgrind -eq 0 ; then
+    if test $debug -eq 0 ; then
+	if test -f "${XCRYSDEN_XCRYS_DIR}/xcrys.dll" ; then
+	    # CYGWIN: xcrys.dll will be loaded from xcInit.tcl !!!
+	    if test "x$ARGS" != x; then
+		exec wish "${XCRYSDEN_TOPDIR}/Tcl/xcInit.tcl" $USE -- \
+		     "$XCRYSDEN_TOPDIR" "$XCRYSDEN_SCRATCH" $ARGS > /dev/null &
+	    else
+		exec wish "${XCRYSDEN_TOPDIR}/Tcl/xcInit.tcl" $USE -- \
+		     "$XCRYSDEN_TOPDIR" "$XCRYSDEN_SCRATCH" "$@" > /dev/null &
+	    fi
+	else
+	    # testing
+	    if test "x$ARGS" != x; then
+		"${XCRYSDEN_XCRYS_DIR}/xcrys" \
+		    "${XCRYSDEN_TOPDIR}/Tcl/xcInit.tcl" $USE -- \
+		    "$XCRYSDEN_TOPDIR" "$XCRYSDEN_SCRATCH" $ARGS > /dev/null &
+	    else
+		"${XCRYSDEN_XCRYS_DIR}/xcrys" \
+		    "${XCRYSDEN_TOPDIR}/Tcl/xcInit.tcl" $USE -- \
+		    "$XCRYSDEN_TOPDIR" "$XCRYSDEN_SCRATCH" "$@" > /dev/null &
+	    fi
+	    wait $!
+	fi
+    else
+	#
+	# DEBUGGING ...
+	#
+	XCRYSDEN_DEBUG=1
+	export XCRYSDEN_DEBUG 
+	DBGFILE=`mktemp -t gdb-XXXXXX`
+	echo "" > $DBGFILE
+	if test -f BREAKS ; then
+	    cat BREAKS > $DBGFILE
+	fi
+	echo "" >> $DBGFILE
+	echo "run $XCRYSDEN_TOPDIR/Tcl/xcInit.tcl $XCRYSDEN_TOPDIR $XCRYSDEN_SCRATCH \\" >> $DBGFILE
+	if test "x$ARGS" != x; then
+	    echo "$ARGS" >>  $DBGFILE
+	else
+	    echo "$@" >>  $DBGFILE
+	fi
+	if test -f "${XCRYSDEN_XCRYS_DIR}/xcrys.dll" ; then
+	# CYGWIN: I couldn't get debugging running under cygwin (t.k.)
+	    echo "Ups, debugging does not yet work under CYGWIN !!!"
+	    exit 1
+	else
+	    gdb "$XCRYSDEN_XCRYS_DIR/xcrys" -x $DBGFILE
+	fi
+    fi
+else
+    if test -f "${XCRYSDEN_XCRYS_DIR}/xcrys.dll" ; then
+	# CYGWIN: xcrys.dll will be loaded from xcInit.tcl !!!
+	echo "
+WARNING: don't know how to use valgrind on CYGWIN !!!
+"
+	exit 1
+    else
+	#
+	# VALGRIND (i.e. memory checking) !!!
+	#
+	# --leak-check=full
+	if test "x$ARGS" != x; then
+	    valgrind --leak-check=full "${XCRYSDEN_XCRYS_DIR}/xcrys" \
+		"${XCRYSDEN_TOPDIR}/Tcl/xcInit.tcl" $USE -- \
+		"$XCRYSDEN_TOPDIR" "$XCRYSDEN_SCRATCH" $ARGS > /dev/null &
+	else
+	    valgrind --leak-check=full "${XCRYSDEN_XCRYS_DIR}/xcrys" \
+		"${XCRYSDEN_TOPDIR}/Tcl/xcInit.tcl" $USE -- \
+		"$XCRYSDEN_TOPDIR" "$XCRYSDEN_SCRATCH" $@ > /dev/null &
+	fi
+	wait $!
+    fi
+fi
+
+if test -f "$PWD/core" ; then
+    rm -f core
+fi
+exit 0
+

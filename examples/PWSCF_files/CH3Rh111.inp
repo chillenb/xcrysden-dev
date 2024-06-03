@@ -1,0 +1,86 @@
+
+************************************************************************
+ Structure: CH3(TOP-fcc)+Rh(111) ; (2x2) SUPER-CELL
+------------------------------------------------------------------------
+ (111) surface lattice:
+ 1.0  0.0  0.0
+ 0.5  V3/2 0.0
+ 0.0  0.0  X.X
+------------------------------------------------------------------------
+ 3L slab (1L-relaxed + 2Lfixed)
+************************************************************************
+
+&CONTROL
+             title = 'CH3 + Rh(111)-1x1-3L(1R+2F)' ,
+       calculation = 'relax',
+         verbosity = 'default',
+      restart_mode = 'restart' ,
+           tprnfor = .true.,
+            outdir = '/scratch/sists022/Rh111/ch3rh111/',
+            prefix = 'TOP-fcc',
+           disk_io = 'default',
+        pseudo_dir = '/u/sists022/pw/pseudo/',
+/
+
+&SYSTEM
+             nosym = .true.
+
+             ibrav = 0,
+         celldm(1) = 10.35501312505203925684,
+               nat = 16,
+              ntyp = 3,
+           ecutwfc = 27.0000000000,
+           ecutrho = 216.0000000000,
+       occupations = 'smearing' ,
+           degauss = 0.03,
+          smearing = 'methfessel-paxton' ,
+/
+
+&ELECTRONS
+  electron_maxstep = 100,
+          conv_thr = 1.0e-06,
+       mixing_mode = 'local-TF' ,
+       startingpot = 'atomic' ,
+       startingwfc = 'atomic' ,
+       mixing_beta = 0.300000000,
+       mixing_ndim = 8,
+   diagonalization = 'david_overlap' ,
+  diago_david_ndim = 8,
+/
+
+&IONS
+             ion_dynamics = 'bfgs',
+  potential_extrapolation = 'wfc',
+/
+
+CELL_PARAMETERS hexagonal
+   1.00000    0.00000000000000000000    0.00000
+  -0.50000    0.86602540378443864675    0.00000
+   0.00000    0.00000000000000000000    2.70000
+
+ATOMIC_SPECIES
+H  1.000 HUSPBE.RRKJ3 
+C  1.000 C2s2pUSPBE.RRKJ3
+Rh 1.000 RhUSPBE.RRKJ3
+
+ATOMIC_POSITIONS angstrom
+  H   -0.9082985520    -0.5233621001     6.8823909581    1 1 1
+  H    0.9090764523    -0.5231097341     6.8809842289    1 1 1
+  H   -0.0000000095     1.0506227016     6.8758881212    1 1 1
+  C    0.0000000000     0.0000000000     6.5135902286    1 1 1
+ Rh    0.0000000000     0.0000000000     4.4135902286    1 1 1
+ Rh    4.1097248451    -2.3727507352     4.4135902286	 1 1 1
+ Rh    2.7398165634     0.0000000000     4.4135902286	 1 1 1
+ Rh    1.3699082817    -2.3727507352     4.4135902286	 1 1 1
+ Rh   -1.3699082817     0.7909170944     2.2370509086	 0 0 0
+ Rh    0.0000000000    -1.5818336408     2.2370509086	 0 0 0
+ Rh    2.7398165634    -1.5818336408     2.2370509086	 0 0 0
+ Rh    1.3699082817     0.7909170944     2.2370509086	 0 0 0
+ Rh   -2.7398165634     1.5818336408     0.0000000000	 0 0 0
+ Rh   -1.3699082817    -0.7909170944     0.0000000000	 0 0 0
+ Rh    1.3699082817    -0.7909170944     0.0000000000	 0 0 0
+ Rh    0.0000000000     1.5818336408     0.0000000000	 0 0 0
+
+K_POINTS automatic
+4 4 1   1 1 1
+

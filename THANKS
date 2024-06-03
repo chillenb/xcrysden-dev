@@ -1,0 +1,62 @@
+Thanks to:
+
+        Mauro Causa:
+		for the initiation of the XCrySDen project, numerous
+		discussons and suggestions at the initial stages of
+		the project, interfacing toward CRYSTAL program and
+		more ...
+
+	Florent Boucher:
+		for bug fixes, especially those related to
+		k-path coordinates for WIEN2k.
+	
+	Peter Blaha:
+		for automatic labeling of the k-points: the idea and
+		the lookup table
+
+	Eric Verfaillie:
+		for implementing anaglyph display mode
+
+	Gerardo Ballabio:
+		for implementing stereo display mode
+
+        Julien Lefevre:
+                for porting to Tcl8.6 (i.e., fixing the obsolete
+                interp->result issue)
+	
+	Pablo de la Mora:
+		for spotting number of bugs in the visualization of
+		Fermi surfaces
+
+	Peter Blaha, Joachim Luitz, and KarlHeinz Schwartz:
+		for interfacing toward WIEN2k.	
+
+	Stefano Baroni and the rest of the PWscf team:
+		for interfacing toward PWscf and discussions about
+		using GPL license for XCrySDen.
+
+	Mike Ford:
+		for porting xcrysden to MACOSX
+
+	Paul Bourke:
+		for his routine for polygonising a scalar field
+
+	Hanspeter Niederstrasser:
+		for porting xcrysden into Fink distribution
+
+	Michael Banck:
+		for his help in proting xcrysden into Debian
+
+	Tobias Burnus:
+	       for porting to openSUSE and bug reports
+
+	Lorenzo Paulatto and Martin Kroeker:
+	       for providing fixes (workarounds) for several types of
+	       xcrysden's crashes, either associated to memory leaks
+	       or Xwindow errors
+
+	Thanks to those who have written the "external" software
+	that XCRYSDEN uses, including Tcl/Tk, Mesa, BWidget, Togl,
+	GL2PS, FFTW, and Meschach ...
+
+	And many others for their bug reports ...

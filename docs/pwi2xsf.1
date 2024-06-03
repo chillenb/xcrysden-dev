@@ -1,0 +1,46 @@
+.TH pwi2xsf 1 "August 7, 2019" "XCrySDen" "XCrySDen"
+
+.SH NAME
+pwi2xsf \- convert the pw.x input file to XSF format
+
+.SH SYNOPSIS
+.B pwi2xsf
+.RI [ \-r ]
+\fIfile\fR
+
+.SH DESCRIPTION
+\fBpwi2xsf\fR extracts the atomic structure from \fBpw.x\fR or
+\fBneb.x\fR input file and prints the XSF formatted structure data to
+standard output.  It is a utility program of \fBxcrysden\fR package
+(\fIhttp://www.xcrysden.org/\fR) and XSF is the native \fBxcrysden
+structure format\fR (\fIhttp://www.xcrysden.org/doc/XSF.html\fR).
+
+If \fIfile\fR is specified as "-" then standard input is read.
+
+.SH OPTION
+
+.TP 4
+\fB\-r 
+For old \fBpw.x\fR versions < 1.2 one must spefify the
+\fIityp\fR-->\fInat\fR conversion and the corresponding data are
+written to file \fInuclei.charges\fR. The \fB\-r\fR flag deletes this
+file as to force new \fIityp\fR-->\fInat\fR specification.
+
+.SH "COPYRIGHT"
+
+Copyright (C) 1996--2019 Anton Kokalj
+
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or (at
+your option) any later version.  You should have received a copy of
+the GNU General Public License along with this program; if not, write
+to the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+Boston, MA 02111-1307, USA.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+

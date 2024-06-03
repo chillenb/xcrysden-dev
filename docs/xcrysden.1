@@ -1,0 +1,295 @@
+.TH xcrysden 1 "August 7, 2019" "XCrySDen" "XCrySDen" 
+
+.SH NAME
+xcrysden \- crystalline and molecular structure visualizer
+
+.SH SYNOPSIS
+.B xcrysden 
+.RI [ special-options ]
+.br
+.B  xcrysden 
+.RI [ special-options ] 
+\fIformat-options\fR
+\fIfile\fR|\fIdirectory\fR
+
+.SH DESCRIPTION
+\fBXCrySDen\fR is a crystalline and molecular structure visualisation
+program, which aims at display of isosurfaces and contours, which can
+be superimposed on crystalline structures and interactively rotated
+and manipulated.
+
+.SH SPECIAL OPTIONS
+
+.TP 4
+\fB\-h 
+.PD 0 
+.TP 
+\fB\-\-help
+Display help message.
+
+
+.TP 
+\fB\-v
+.PD 0
+.TP 
+\fB\-\-version
+Display program version information.
+
+.TP
+\fB\-u \fIid\fR 
+.PD 0
+.TP 
+\fB\-\-use\fR \fIid\fR 
+Load XCrySDen embedded into container window with window-ID=\fIid\fR.
+
+.TP
+\fB\-r \fIdim
+.PD 0
+.TP
+\fB\-\-reducedim \fIdim\fR
+Reduce periodic dimension of XSF file to \fIdim\fR. Must be specified
+before \fB\-\-xsf\fR option, e.g., \fBxcrysden \-r\fR 2 \fB\-\-xsf \fIfile\fR.
+
+
+.TP
+\fB\-c \fIfile\fR
+.PD 0
+.TP
+\fB\-\-custom \fIfile\fR
+Load custom\-definitions from a specified file (the syntax is that of
+\fB~/.xcrysden/custom\-definitions\fR).
+
+.TP
+\fB\-a \fIfile\fR
+.PD 0
+.TP
+\fB\-\-attributes \fIfile\fR
+Load attributes from file. The format of the attributes file is the
+following:
+
+        \fBELEMENTCOLOR
+        \fIatomic-number1   red1 blue1 green1
+        atomic-number2   red2 blue2 green2
+        \fR...
+        \fBELEMENTRADIUS
+        \fIatomic-number1   radius1
+        atomic-number2   radius2
+        \fR...
+
+
+.TP 
+\fB\-l \fIfile\fR
+.PD 0
+.TP
+\fB\-\-lights \fIfile\fR
+Load lights parameters from XCrySDen's lights formatted file.
+
+
+.SH FORMAT OPTIONS
+
+.TP 4
+\fB\-\-xsf \fIfile\fR 
+Load structure from XCrySDen's-Structure-File (XSF) formatted file.
+
+.TP
+\fB\-\-animxsf \fIfile\fR
+.PD 0
+.TP
+\fB\-\-axsf \fIfile\fR   
+Load structures from Animated-XCrySDen's-Structure-File (AXSF)
+formatted file.
+
+.TP
+.PD 1
+\fB\-\-bxsf \fIfile\fR 
+Load bands from BXSF (Band-XSF) file and visualize Fermi Surface.
+	
+.TP 
+\fB\-\-xmol \fIfile\fR
+.PD 0
+.TP
+\fB\-\-xyz \fIfile\fR   
+Load structure from XYZ formatted file.
+
+.TP
+\fB\-\-pdb \fIfile\fR    
+Load structure from PDB formatted file.
+
+.TP
+\fB\-\-gzmat \fIfile\fR 
+Load structure from Gaussian Z-matrix (requires Open-Babel program).
+
+.TP
+\fB\-\-gaussian_out \fIfile\fR
+.PD 0
+.TP
+\fB\-\-gxx_out \fIfile\fR
+.PD 0
+.TP
+\fB\-\-g98_out \fIfile\fR
+Load structure from Gaussian output file. Only single point
+calculation and optimization run is supported so far. For the
+optimization run it is possible to render all the structures that were
+produced during the run.
+
+.TP
+\fB\-\-cube \fIfile\fR
+.PD 0
+.TP
+\fB\-\-gXX_cube \fIfile\fR
+.PD 0
+.TP
+\fB\-\-g98_cube \fIfile\fR
+Load structure from Gaussian cube file. The cube file should be
+produced with the Cube=Cards option. Only scalar cube files are
+supported, that is, Cube=(Cards,Density) or Cube=(Cards,Orbitals) or
+Cube=(Cards,Potential). Refer to GAUSSIAN manual for the meaning of
+this keywords.
+
+                
+.TP
+\fB\-\-orca_out \fIfile\fR
+Load structure(s) from Orca output file. Only Geometry optimization
+outputs were tested so far.
+
+
+.TP
+\fB\-\-crystal_inp \fIfile\fR
+Load structure from CRYSTAL (\fIhttp://http://www.crystal.unito.it/\fR) input file.
+
+
+.TP\fB
+\-\-crystal_f9 \fIfile\fR
+Load structure from CRYSTAL (\fIhttp://http://www.crystal.unito.it/\fR) fortran unit 9.
+
+
+.TP
+\fB\-\-wien_struct \fIfilehead\fR|\fIfile\fR|\fIdirectory\fR
+Load structure from WIEN2k (\fIhttp://www.wien2k.at/\fR) struct-file,
+where:
+
+    \fIfilehead\fR = name of struct file without \fB.struct\fR extension,
+    \fIfile\fR = filename,
+    \fIdirectory\fR = name of case directory.      
+
+
+.TP
+\fB\-\-wien_kpath \fIdirectory\fR|\fIstruct-file\fR
+Read \fIstruct\fR file and render first Brillouin zone with special
+k-points. K-path can be selected interactively by mouse-clicking the
+special k-points.  User must specify \fIEMIN\fR and \fIEMAX\fR
+energies and total number of k-points along the path. This number is
+merely an estimation of total number of k-points, since XCrySDen tries
+to get very uniform sampling of k-points along the path (don't specify
+WIEN2k maximum allowed number of k-points, since XCrySDen maight
+generate few points more).
+
+
+.TP
+\fB\-\-wien_renderdensity \fIdirectory\fR
+Read \fIstruct\fR, \fIoutput\fR, and \fIrho\fR files and renders
+crystalline structure and precomputed charge density.
+
+
+.TP
+\fB\-\-wien_density \fIdirecory\fR
+Either 2D or 3D region for charge density calculation is interactively
+chosen by mouse-clicking. XCrySDen generates \fIin5\fR file(s),
+calculates and renders charge density either as isolines/colorplanes
+(2D) or isosurfaces (3D).
+
+
+.TP
+\fB\-\-wien_fermisurface \fIdirectory\fR
+Pop-up a task window for Fermi surface creation.
+After several steps the Fermi surface is (hopefully)
+drawn as 3D isosurface.
+
+
+.TP
+\fB\-\-fhi_inpini \fIfile\fR
+Load structure from FHI98MD \fBinp.ini\fP formatted file.
+
+
+.TP
+\fB\-\-fhi_coord \fIfile\fR
+Load structure from FHI98MD \fBcoord.out\fR formatted file.
+
+
+.TP
+\fB\-\-pwi 
+.PD 0 
+.TP
+\fB\-\-pw_inp \fIfile\fR
+Load structure from \fBpw.x input\fR file. \fBpw.x\fR is a
+pseudopotential planewave program of the Quantum-ESPRESSO distribution
+(\fIhttp://www.quantum-espresso.org/\fR).
+
+.TP
+\fB\-\-pwo
+.PD 0 
+.TP
+\fB\-\-pw_out \fIfile\fR
+Load structure from \fBpw.x output\fR file. \fBpw.x\fR is a
+pseudopotential planewave program of the Quantum-ESPRESSO distribution
+(\fIhttp://www.quantum-espresso.org/\fR).
+
+
+.TP
+\fB\-s \fIscript\fR
+.PD 0 
+.TP
+\fB\-\-script \fIscript\fR
+Load script from file containing Tcl script.
+
+.TP
+\fB\-\-os \fIscript\fR
+.PD 0 
+.TP
+\fB\-\-oldscript \fIscript\fR
+Load old-formatted script (prior to xcrysden-1.6) from file.
+
+.TP
+\fB\-\-print \fIfilename\fR
+Print the displayed structure to a file and exit. This is useful
+within the shell scripts to achieve "automatic" printing.
+
+Example: xcrysden --xsf file.xsf --script state.xcrysden --print file.png
+
+In this example "--xsf file.xsf" loads the structure from XSF file,
+"--script state.xcrysden" setups a desired display (such a script is
+typically created via File-->Save Current State menu option) and
+"--print file.png" prints the displayed structure to a file and exits
+xcrysden.
+
+
+.SH "SEE ALSO"
+
+Fore more information about \fBXCrySDen\fR, see:
+.br
+\fIhttp://www.xcrysden.org/\fR. 
+
+Further documentation is available at:
+.br
+\fIhttp://www.xcrysden.org/Documentation.html\fR.
+
+
+
+.SH "COPYRIGHT"
+
+Copyright (C) 1996--2019 Anton Kokalj
+
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or (at
+your option) any later version.  You should have received a copy of
+the GNU General Public License along with this program; if not, write
+to the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+Boston, MA 02111-1307, USA.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+

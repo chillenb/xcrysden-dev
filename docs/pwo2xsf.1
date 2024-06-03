@@ -1,0 +1,87 @@
+.TH pwo2xsf 1 "August 7, 2019" "XCrySDen" "XCrySDen"
+
+.SH NAME
+pwo2xsf \- convert the pw.x output file to XSF format
+
+.SH SYNOPSIS
+.B pwo2xsf
+.RI [ special-option ] 
+\fIcoordinates-option\fR
+[\fIfile\fR]
+
+.SH DESCRIPTION
+\fBpwo2xsf\fR extracts atomic structures from \fBpw.x\fR output
+file and prints the XSF formated structure data to standard output.
+It is a utility program of \fBxcrysden\fR package
+(\fIhttp://www.xcrysden.org/\fR) and XSF is the native \fBxcrysden
+structure format\fR (\fIhttp://www.xcrysden.org/doc/XSF.html\fR).
+
+If \fIfile\fR is not specified then standard input is read.
+
+.SH SPECIAL OPTION
+
+.TP 4
+\fB\-r \fIdim\fR
+Reduce periodic dimension to \fIdim\fR, i.e., \fIdim\fR = 2, 1, or 0.
+
+.SH COORDINATES OPTIONS
+
+These options specify which cordinates to extract. The possibilities
+are:
+
+.TP 4
+\fB\-ic \fIfile\fR 
+.PD 0 
+.TP 
+\fB\-\-inicoor \fIfile\fR 
+Extract the initial, that is, input ionic coordinates.
+
+.TP 4
+\fB\-lc \fIfile\fR 
+.PD 0 
+.TP 
+\fB\-\-latestcoor \fIfile\fR 
+Extract the latest printed ionic coordinates from pw.x output file.
+
+.TP 4
+\fB\-oc \fIfile\fR 
+.PD 0 
+.TP 
+\fB\-\-optcoor \fIfile\fR
+Similar to "\-\-latestcoor" but extracts just the optimized coordinates
+if present or else nothing.
+
+.TP 4
+\fB\-a \fIfile\fR 
+.PD 0 
+.TP 
+\fB\-\-animxsf \fIfile\fR
+Extract the coordinates of all ionic steps as Animated-XSF.
+
+.TP 4
+\fB\-nc file\fR 
+.PD 0 
+.TP 
+\fB\-\-nebcoor PW.out\fR
+Extract the coordinates and forces from the \fBPW.out\fR file of NEB
+(path) calculation.
+
+
+.SH "COPYRIGHT"
+
+Copyright (C) 1996--2019 Anton Kokalj
+
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or (at
+your option) any later version.  You should have received a copy of
+the GNU General Public License along with this program; if not, write
+to the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+Boston, MA 02111-1307, USA.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+

@@ -1,0 +1,30 @@
+&control
+   calculation = 'scf'
+   prefix = 'rutile'
+/
+
+&system
+   ibrav = 6
+   celldm(1) = 8.61889817204
+   celldm(3) = 0.670915393
+   space_group = 136
+   nat = 2
+   ntyp = 2
+   ecutwfc = 120.0
+   ecutrho = 1200.0
+   nbnd=40
+/
+
+&electrons
+/
+
+ATOMIC_SPECIES
+   Si 1.0  Si.pbe-rrkj.UPF
+   O  1.0   O.pbe-rrkjus.UPF
+
+ATOMIC_POSITIONS (crystal_sg)
+   Si       0.000000000   0.000000000   0.000000000
+   O        0.305707826   0.305707826   0.000000000
+
+K_POINTS (automatic)
+   4 4 6  1 1 1

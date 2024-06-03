@@ -1,0 +1,4 @@
+#define dot1x3H_width 3
+#define dot1x3H_height 1
+static unsigned char dot1x3H_bits[] = {
+   0x01};

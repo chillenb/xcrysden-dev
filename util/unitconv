@@ -1,0 +1,127 @@
+#!/bin/sh
+# \
+# this line restarts tclsh \
+exec tclsh $0 "$@"
+
+#
+# Usage: unitconv unit value 
+#    or: unitconv unit expr
+#
+# 
+
+# supported units
+
+set energy_units {
+    au    
+    ry    
+    ev
+    kjm    
+    kcalm
+    kj
+    kcal
+    erg
+}
+set length_units {
+    angs
+    bohr
+    m
+}
+set allowed_units "$energy_units $length_units"
+
+
+# check for correctness of specified unit on command-line
+
+set unit [string tolower [lindex $argv 0]]
+
+if { [lsearch -nocase $allowed_units $unit] < 0 } {
+    puts stderr "input unit not known; must be one of [join $allowed_units {, }]"
+    exit
+}
+
+
+# ------------------------------------------------------------------------
+# PHYSICAL CONSTANTS
+#
+
+# Physical constants, SI (NIST CODATA 2006), Web Version 5.1
+# http://physics.nist.gov/constants
+
+set j   1.000000000000
+set au  4.35974394e-18;  # J
+set ev  1.602176487e-19; # J
+set mol 6.02214129e23
+
+# thermo-kilocalorie (International Standard ISO 31-4: Quantities and
+# units – Part 4: Heat. Annex B (informative): Other units given for
+# information, especially regarding the conversion
+# factor. International Organization for Standardization, 1992.)
+
+set kcal 4184;  # J
+
+# from wikipedia:
+set erg 1e-7; # J
+
+#--------------------------------
+# Energy Units (use J as default)
+#--------------------------------
+
+set kj     1000.00000000000000
+set ry     [expr $au   / 2.0]
+set kjm    [expr $kj   / $mol]
+set kcalm  [expr $kcal / $mol]
+
+
+#-----------------------------------------
+# Distance Units (use Angstrom as default)
+#-----------------------------------------
+set angs 1.0
+set bohr 0.52917720859
+set m    1.e10
+# ------------------------------------------------------------------------
+
+
+#
+# evaluate & convert user specified expression/value
+#
+
+upvar #0 $unit un_fac
+
+# parse the command line arguments
+
+foreach item [lrange $argv 1 end] {
+    append numbers [format "%s " $item]
+}
+set orig_value [expr 1.0 * ($numbers)]; 
+
+# store result either in J or Angstroms !!!
+
+set value [expr $un_fac * $orig_value]; 
+
+
+#
+# PRINTOUT
+#
+puts stdout "$orig_value $unit = "
+
+if { [lsearch -nocase $energy_units $unit] > -1 } {
+
+    # do we have energy ?
+    
+    foreach _un $energy_units {
+	upvar #0 $_un unval
+	set val [expr $value / $unval]
+	puts stdout "    = $val $_un"
+    }
+
+} elseif { [lsearch -nocase $length_units $unit] > -1 }  {
+
+    # ... or length ?
+
+    foreach _un $length_units {
+	upvar #0 $_un unval
+	set val [expr $value / $unval]
+	puts stdout "    = $val $_un"
+    }
+}
+
+exit 0

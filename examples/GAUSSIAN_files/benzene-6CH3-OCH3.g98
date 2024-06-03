@@ -1,0 +1,71 @@
+%chk=benzene-6CH3-OH.chk
+# B3LYP 6-31G opt scf=nosymm
+
+Initial Structural Optimization of C6H6-5CH3-OH
+
+0 2
+C
+C 1  rCC1
+C 2  rCC2  1 aCCCb1
+C 3  rCC3  2 aCCCb2 1  dBenzen
+C 4  rCC3  3 aCCCb3 2  dBenzen
+C 5  rCC2  4 aCCCb2 3  dBenzen
+C 1  rCCm  2 aCCCmOH 3 dMetOH
+H 7  rCH   1 aHCC  2  dH1
+H 7  rCH   1 aHCC  2  dH2
+H 7  rCH   1 aHCC  2  dH3
+C 2  rCCm  3 aCCCm 4  dMethyl
+H 11 rCH   2 aHCC  3  dH1m
+H 11 rCH   2 aHCC  3  dH2m
+H 11 rCH   2 aHCC  3  dH3m
+C 3  rCCm  4 aCCCm 5  dMethyl
+H 15 rCH   3 aHCC  4  dH1
+H 15 rCH   3 aHCC  4  dH2
+H 15 rCH   3 aHCC  4  dH3
+C 4  rCCm  5 aCCCm 6  dMethyl
+H 19 rCH   4 aHCC  5  dH1m
+H 19 rCH   4 aHCC  5  dH2m
+H 19 rCH   4 aHCC  5  dH3m
+C 5  rCCm  6 aCCCm 1  dMethyl
+H 23 rCH   5 aHCC  6  dH1
+H 23 rCH   5 aHCC  6  dH2
+H 23 rCH   5 aHCC  6  dH3
+C 6  rCCm  1 aCCCm 2  dMethyl
+H 27 rCH   6 aHCC  1  dH1m
+H 27 rCH   6 aHCC  1  dH2m
+H 27 rCH   6 aHCC  1  dH3m
+O 1  rCO   2 aCCO  3  dOH
+C   31 r31_32   1  a1_31_32   2 d31_1_2_32
+H   32 r32_33   31 a31_32_33  1  180.0
+H   32 r32_33   31 a31_32_33  1  60.0
+H   32 r32_33   31 a31_32_33  1 -60.0
+Variables:
+  rCO   = 1.504
+  rCC1  = 1.5166
+  rCC2  = 1.381
+  rCC3  = 1.4379
+  rCCm  = 1.52
+  rCH   = 1.10
+  aHCC  = 112.35
+  aCCCb1 = 120.1
+  aCCCb2 = 120.2
+  aCCCb3 = 120.3
+  aCCCmOH= 120.0
+  aCCO   = 120.0
+  dMetOH = 120.0
+  dOH    =-120.0
+  aCCCm   = 120.0
+  dBenzen = 0.0
+  dMethyl = 180.0
+  dH1     =  90.0
+  dH2     = -30.0
+  dH3     =-150.0  
+  dH1m    = -90.1 
+  dH2m    =  30.1 
+  dH3m    = 150.1   
+  r31_32     =  1.5
+  a1_31_32   =  120.0
+  d31_1_2_32 =  60.0
+  r32_33     = 1.1
+  a31_32_33  = 107.0
+

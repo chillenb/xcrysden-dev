@@ -1,0 +1,92 @@
+#########################################################################
+#
+# System-dependent definitions for Mac OS X using Mesa and "unix-like"
+# Tcl/Tk.
+#
+# Mike Ford 12/03/04
+# University of Technology, Sydney
+#
+# Updated by Tone on Mon Dec 22 2008
+#
+# -----------------------------------------------------------------------
+#
+# !!! EDIT ACCORDING TO YOUR OWN NEEDS !!!
+#
+# -----------------------------------------------------------------------
+#
+# BEWARE: The Apple X11 libraries don't work, but XCrySDen still runs
+# under the Apple X11 window server. Please link with the Darwin X
+# libraries instead. 
+# See: http://ftp.xfree86.org/pub/XFree86/4.4.0/binaries/Darwin-ppc-7.x/
+# You need to download the following packages:
+#
+# Xprog.tgz ... for static X11 and OpenGL libraries
+# Xbin.tgz  ... for dynamic X11 and OpenGL libraries
+#
+########################################################################
+
+#------------------------------------------------------------------------
+# if you have a GNU make it is better to set the MAKE variable to point
+# to gnu make
+#------------------------------------------------------------------------
+MAKE = make
+
+#------------------------------------------------------------------------
+# compilers & flags
+#------------------------------------------------------------------------
+CFLAGS = -funroll-loops -fPIC -DTOGL_USE_FONTS -DHAVE_NO_GETLINE
+CC     = gcc
+#LDLIB  = -ldl
+MATH   = -lm
+
+FFLAGS = 
+FC     = g77 -O2
+
+
+#------------------------------------------------------------------------
+# X-libraries & include files
+#
+# for STATIC compilation one should add: -lpthread
+#------------------------------------------------------------------------
+
+# NOTE: Use the XDarwin server instead of Apple's Xserver
+
+DARWIN_X11_PREFIX = /usr/X11R6-darwin
+X_LIB     = -L$(DARWIN_X11_PREFIX)/lib -lXmu -lX11 -lXext
+X_INCDIR  = -I$(DARWIN_X11_PREFIX)/include
+
+
+#------------------------------------------------------------------------
+# Libraries and include files
+#------------------------------------------------------------------------
+
+#
+# Libraries (use .a for static and .dylib for dynamic libraries)
+#
+# BEWARE: must use the darwin OpenGL libraries
+TCL_LIB      = -ltcl$(TCL_VER2).dylib
+TK_LIB       = -ltk$(TCL_VER2).dylib
+GLU_LIB      = -L$(DARWIN_X11_PREFIX)/lib -lGLU.dylib
+GL_LIB       = -lGL.dylib
+FFTW3_LIB    = -lfftw3.dylib
+# this is only used for some testing purposes
+#MESCHACH_LIB = -lmeschach.dylib
+
+
+#
+# Include directories (set accoring to your needs)
+#
+TCL_INCDIR  = \
+	-I/Library/Frameworks/Tcl.framework/Versions/$(TCL_VER2)/Headers \
+	-I/Library/Frameworks/Tcl.framework/Versions/$(TCL_VER2)/PrivateHeaders
+TK_INCDIR   = \
+	-I/Library/Frameworks/Tk.framework/Versions/$(TCL_VER2)/Headers \
+	-I/Library/Frameworks/Tk.framework/Versions/$(TCL_VER2)/PrivateHeaders
+GL_INCDIR   = \
+	-I$(DARWIN_X11_PREFIX)/include
+
+FFTW3_INCDIR    =
+# this is only used for some testing purposse
+#MESCHACH_INCDIR =
+
+#------------------------------------------------------------------------

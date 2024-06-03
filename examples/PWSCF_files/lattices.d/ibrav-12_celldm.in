@@ -1,0 +1,36 @@
+&CONTROL
+   calculation          =  'scf',
+/
+
+&SYSTEM
+   ibrav        =  -12,
+   celldm(1)    =  6.944,
+   celldm(2)    =  1.2,
+   celldm(3)    =  1.6,
+   celldm(5)    =  0.6,
+   degauss      =  0.03,
+   ecutrho      =  240.0,
+   ecutwfc      =  30.0,
+   nat          =  2,
+   ntyp         =  2,
+   occupations  =  'smearing',
+   smearing     =  'methfessel-paxton',
+/
+
+&ELECTRONS
+   electron_maxstep = 0
+/
+
+ATOMIC_SPECIES 
+   Cu    1.0   Cu.pbe-kjpaw.UPF 
+   O     1.0   O.pbe-kjpaw.UPF 
+
+ATOMIC_POSITIONS crystal
+   Cu       0.00   0.00   0.00
+   O        0.25   0.25   0.25
+   
+K_POINTS automatic
+   8   8   8   1   1   1 
+
+
+

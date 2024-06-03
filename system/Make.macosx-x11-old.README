@@ -1,0 +1,86 @@
+If you encounter problems while compiling XCRYSDEN on MAC OSX below
+notes from Mike Ford might be useful.
+
+Tone Kokalj, Fri Apr  2 13:19:27 CEST 2004
+
+
+
+Compiling XCRYSDEN for MacOS X v10.2
+************************************
+Mike Ford 12/03/04
+University of Technology, Sydney
+
+
+1) Set up the Make.sys file
+---------------------------
+
+Have to use COMPILE_TCLTK=no and COMPILE_MESA=no option and compile
+MESA-4.0, tcl8.4 and tk8.4 seperately.
+
+Use the g77 and gcc compilers.
+
+Compile using XDarwin v1.1.0.1 Xwindow libraries, not the Apple X11
+server libraries.
+
+The program will still run under the Apple X11 server (I have window
+servers installed, one in the directory /usr/X11R6, the other in
+/usr/X11R6-darwin).
+
+NOTE: In the following it is assumed that the top installed directory
+is /applications/XCrySDen-B1.0s
+
+
+2) Compile Mesa-4.O
+-------------------
+Confiugre with makefiles with:
+   $ cd /applications/XCrySDen-B1.0s/external/src/Mesa-4.0 with:
+   $ ./configure --disable-shared \
+                 --prefix=/applications/XCrySDen-B1.0s/external \
+                 --x-libraries=/usr/X11R6-xdarwin/lib \
+                 --x-includes=/usr/X11R6-xdarwin/include \
+                 --disable-3dnow
+
+In the file
+/applications/XCrySDen-B1.0s-all/external/src/Mesa-4.0/si-glu/libtess/memalloc.h
+replace '#include <malloc.h>' with '#include <stdlib.h>'
+
+In the file
+/applications/XCrySDen-B1.0s-all/external/src/Mesa-4.0/libtool change
+'build_old_libs=no' to 'build_old_libs=yes'
+
+Compile with:
+   $ make install
+
+
+3) Compile tcl8.3.3
+-------------------
+Configure makefiles with:
+   $ cd /applications/XCrySDen-b1.0s/external/src/tcl8.3.3/unix
+   $ ./configure --disable-shared \
+                 --prefix=/applications/XCrySDen-B1.0s/external \
+                 --x-libraries=/usr/X11R6-xdarwin/lib \
+                 --x-includes=/usr/X11R6-xdarwin/include \
+
+Compile with:
+   $ make install
+
+
+4) Compile tk8.3.3
+------------------
+Configure makefiles with:
+   $ cd /applications/XCrySDen-b1.0s/external/src/tk8.3.3/unix
+   $ ./configure --disable-shared \
+                 --prefix=/applications/XCrySDen-B1.0s/external \
+                 --x-libraries=/usr/X11R6-xdarwin/lib \
+                 --x-includes=/usr/X11R6-xdarwin/include \
+
+Compile with:
+   $ make install
+
+
+5) Compile XCrySDen
+-------------------
+
+   $ cd /applications/XCrySDen-B1.0s-all
+   $ make all
+

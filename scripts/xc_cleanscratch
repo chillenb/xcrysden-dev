@@ -1,0 +1,68 @@
+#!/bin/sh
+#############################################################################
+# Author:                                                                   #
+# ------                                                                    #
+#  Anton Kokalj                                  Email: Tone.Kokalj@ijs.si  #
+#  Department of Physical and Organic Chemistry  Phone: x 386 1 477 3523    #
+#  Jozef Stefan Institute                          Fax: x 386 1 477 3811    #
+#  Jamova 39, SI-1000 Ljubljana                                             #
+#  SLOVENIA                                                                 #
+#                                                                           #
+# Source: $XCRYSDEN_TOPDIR/scripts/xc_cleanscratch
+# ------                                                                    #
+# Copyright (c) 1996-2003 by Anton Kokalj                                   #
+#############################################################################
+
+if test "x$XCRYSDEN_SCRATCH" = "x"; then
+    echo "Exiting; XCRYSDEN_SCRATCH does not exists !!!"
+    exit 0
+fi
+
+DELETE_FILES=$XCRYSDEN_SCRATCH/xc_*
+
+Question () {
+    echo "
+    XCRYSDEN_SCRATCH directory: $XCRYSDEN_SCRATCH/ will be cleaned 
+    (i.e. rm -rf $DELETE_FILES). 
+
+    The following files/directories will be deleted:
+"
+    files=`ls $XCRYSDEN_SCRATCH/* 2> /dev/null`
+    if [ "$files" = "" ]; then
+	echo "    XCRYSDEN_SCRATCH directory is empty !!!
+"
+	exit
+    fi
+
+    echo "$files" | grep xc_
+
+    $ECHO_n "
+    Really delete? ([yes]/[n]o) "
+    read ans
+
+    if [ \( x"$ans" != x"yes" \) -a \( x"$ans" != x"n" \) ]; then
+	echo "
+-- Please answer yes or n !!!"
+	Question
+    fi
+}
+
+#
+# assuming user shell is csh or tcsh or sh
+#
+if [ "`echo -n a`" = "-n a" ]; then
+    ECHO_n=echo
+else
+    ECHO_n="echo -n"
+fi
+
+Question
+
+if [ "$ans" = yes ]; then
+    $ECHO_n "
+Deleting $DELETE_FILES ... "
+    cd $XCRYSDEN_SCRATCH/
+    rm -rf xc_*
+    echo "OK
+"
+fi

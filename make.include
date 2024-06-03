@@ -1,0 +1,68 @@
+# program for fetching external library sources from the web
+# (the usage is: $(DOWNLOAD) url)
+
+DOWNLOAD = wget
+
+
+# Tcl/Tk version & download info
+
+TCL_MAJOR_VERSION   = 8
+TCL_MINOR_VERSION   = 6
+TCL_RELEASE_SERIAL  = 9
+
+TCL_VER2 = $(TCL_MAJOR_VERSION).$(TCL_MINOR_VERSION)
+TCL_VER3 = $(TCL_MAJOR_VERSION).$(TCL_MINOR_VERSION).$(TCL_RELEASE_SERIAL)
+
+TCL_TGZ = tcl$(TCL_VER3)-src.tar.gz
+TK_TGZ  = tk$(TCL_VER3)-src.tar.gz
+TCL_URL = http://prdownloads.sourceforge.net/tcl
+
+
+# Mesa (and Glu) version & download info
+
+MESA_VER = 18.3.6
+MESA_TGZ = mesa-$(MESA_VER).tar.gz
+MESA_URL = ftp://ftp.freedesktop.org/pub/mesa
+
+GLU_VER = 9.0.1
+GLU_TGZ = glu-$(GLU_VER).tar.gz
+GLU_URL = $(MESA_URL)/glu
+
+# Tgol version & download info
+
+TOGL_VER = 2.0
+TOGL_TGZ = Togl$(TOGL_VER)-src.tar.gz
+TOGL_URL = https://sourceforge.net/projects/togl/files/Togl/$(TOGL_VER)
+
+# FFTW version & download info
+
+FFTW_VER = 3.3.8
+FFTW_TGZ = fftw-$(FFTW_VER).tar.gz
+FFTW_URL = http://www.fftw.org
+
+
+# Meschach version & download info
+
+MESCHACH_VER = 1.2
+MESCHACH_TGZ = mesch12b.tar.gz
+MESCHACH_URL = http://www.math.uiowa.edu/~dstewart/meschach
+
+
+# Bwidget version
+
+BWIDGET_VER = 1.9.13
+BWIDGET_TGZ = bwidget-$(BWIDGET_VER).tar.gz
+BWIDGET_URL = http://sourceforge.net/projects/tcllib/files/BWidget/$(BWIDGET_VER)
+
+
+# ---don't-touch---------------------------------------------------------
+
+TCL_DOWNLOAD      = $(TCL_URL)/$(TCL_TGZ)
+TK_DOWNLOAD       = $(TCL_URL)/$(TK_TGZ)
+MESA_DOWNLOAD     = $(MESA_URL)/$(MESA_TGZ)
+GLU_DOWNLOAD      = $(GLU_URL)/$(GLU_TGZ)
+FFTW_DOWNLOAD     = $(FFTW_URL)/$(FFTW_TGZ)
+MESCHACH_DOWNLOAD = $(MESCHACH_URL)/$(MESCHACH_TGZ)
+BWIDGET_DOWNLOAD  = $(BWIDGET_URL)/$(BWIDGET_TGZ)
+TOGL_DOWNLOAD     = $(TOGL_URL)/$(TOGL_TGZ)
+# -----------------------------------------------------------------------

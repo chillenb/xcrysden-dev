@@ -1,0 +1,98 @@
+#########################################################################
+#
+#  System-dependent definitions suitable for creating a semishared
+#  binary distribution of xcrysden by downloading all the external
+#  library sources (i.e. Tcl/Tk/Togl/GL/GLU/FFTW3) in external/src/
+#  and compiling them. After compilation these will be installed into
+#  external/lib/ & external/include/ subdirectories, which can be then
+#  included in the produced compiled-package tarball upon executing
+#  "make bindist-semishared".
+#
+########################################################################
+
+
+#------------------------------------------------------------------------
+# if you have a GNU make it is better to set the MAKE variable to point
+# to gnu make
+#------------------------------------------------------------------------
+MAKE = make
+
+
+#------------------------------------------------------------------------
+# compilers & flags
+#------------------------------------------------------------------------
+# C-preprocessor flags
+CPPFLAGS ?=
+# C-compiler flags
+CFLAGS += -ffast-math -funroll-loops -fPIC -pedantic -Wall
+
+CC     = gcc 
+#LDLIB  = -ldl
+MATH   = -lm -lc
+
+
+FFLAGS  += -static-libgfortran -static-libgcc -fdefault-double-8 -fdefault-real-8 -O2
+FC      = gfortran 
+
+#-------------------------------------------
+#debug options
+#CFLAGS = -g
+#-------------------------------------------
+
+
+#------------------------------------------------------------------------
+# X-libraries & include files
+#------------------------------------------------------------------------
+X_LIB     = -lXmu -lX11 
+X_INCDIR  = 
+
+#------------------------------------------------------------------------
+# EXTERNAL LIBRARIES: Tcl/Tk/Mesa/Togl/FFTW
+
+# setting to "yes" will compile the corresponding library in external/src/
+COMPILE_TCLTK    = yes
+COMPILE_TOGL     = yes
+COMPILE_MESA     = yes
+COMPILE_FFTW     = yes
+# this is only used for some testing purposes
+COMPILE_MESCHACH = no
+
+# Do we want a shared library version of Tcl/Tk/Mesa/Togl?  If we want
+# shared then set the following flags to: --enable-shared else set the
+# following flag to: --disable-shared
+
+TCLTK_OPTIONS  = --enable-shared
+TOGL_OPTIONS   = --enable-shared --with-tcl=$(TOPDIR)/external/lib --with-tk=$(TOPDIR)/external/lib
+MESA_OPTIONS   = --enable-shared
+GLU_OPTIONS    = --enable-shared
+MESA_TARGET    = linux
+FFTW_OPTIONS   = --enable-shared
+
+
+#------------------------------------------------------------------------
+#
+# Libraries
+#
+
+TCL_LIB      = -L$(TOPDIR)/external/lib -ltcl$(TCL_VER2)
+TK_LIB       = -ltk$(TCL_VER2)
+TOGL_LIB     = -lTogl$(TOGL_VER)
+GLU_LIB      = -lGLU
+GL_LIB       = -lGL
+FFTW3_LIB    = -lfftw3
+# this is only used for some testing purposes
+#MESCHACH_LIB =  -lmeschach
+
+#
+# Include directories
+#
+
+TCL_INCDIR      = -I$(TOPDIR)/external/include
+TK_INCDIR       =
+TOGL_INCDIR     =
+GL_INCDIR       = 
+FFTW3_INCDIR    =
+# this is only used for some testing purposes
+#MESCHACH_INCDIR =
+
+#------------------------------------------------------------------------

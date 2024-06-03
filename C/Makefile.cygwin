@@ -1,0 +1,50 @@
+TOPDIR = $(PWD)/..
+include ../Make.sys
+
+INCS      = $(TCL_INCDIR) $(TK_INCDIR) $(GL_INCDIR) $(X_INCDIR) $(EXTERNAL_INCDIR)
+CPP_FLAGS = -DUSE_FONTS
+
+include make-objects
+
+objects = $(XC_OBJS) $(EXTERNAL_OBJS)
+
+default: objects xcrys-dll xctclsh xsf2xsf install
+
+objects: $(objects)
+
+$(objects): %.o: %.c
+	$(CC) $(CFLAGS) $(CPPFLAGS) $(CPP_FLAGS) $(INCS) -c $<
+
+xcrys-dll: $(XC_OBJS) $(EXTERNAL_OBJS)
+	$(CC) $(SHARED) $(CFLAGS) $(XC_OBJS) $(EXTERNAL_OBJS) \
+	$(TK_LIB) $(TCL_LIB) $(GLU_LIB) $(GL_LIB) $(X_LIB) $(MATH) $(LDLIB) \
+	-o xcrys.dll 
+
+
+
+xcTclsh.o xsf2xsf.o: %.o: %.c
+	$(CC) $(CFLAGS) $(CPPFLAGS) $(CPP_FLAGS) $(INCS) -c $<
+
+xctclsh: xcTclsh.o
+	$(CC) $(CFLAGS) xcTclsh.o -o xctclsh $(TCL_LIB) $(MATH) $(LDLIB)
+
+xsf2xsf: xsf2xsf.o
+	$(CC) $(CFLAGS) xsf2xsf.o -o xsf2xsf
+
+
+
+install:
+	-cp xcrys.dll   ../bin
+	#-mv xctclsh.exe ../bin
+	-cp xsf2xsf.exe ../bin
+	-cp xcrys.cygwin   ../bin/xcrys;   chmod +x ../bin/xcrys
+	-cp xctclsh.cygwin ../bin/xctclsh; chmod +x ../bin/xctclsh
+
+clean:
+	-rm -f *.o *~ xcrys xctclsh xsf2xsf
+
+header:
+	$(TOPDIR)/sys_utils/c_header.sh
+
+depend:
+	makedepend $(INCS) $(XC_OBJS:.o=.c)
