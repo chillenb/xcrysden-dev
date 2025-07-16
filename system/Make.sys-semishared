@@ -24,7 +24,7 @@ MAKE = make
 # C-preprocessor flags
 CPPFLAGS ?=
 # C-compiler flags
-CFLAGS += -ffast-math -funroll-loops -fPIC -pedantic -Wall
+CFLAGS += -ffast-math -funroll-loops -fPIC -pedantic -Wall -fcommon
 
 CC     = gcc 
 #LDLIB  = -ldl
