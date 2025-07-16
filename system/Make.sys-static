@@ -22,7 +22,7 @@ MAKE   = make
 # C-preprocessor flags
 CPPFLAGS =
 # C-compiler flags
-CFLAGS  = -static -ffast-math -funroll-loops -pedantic -Wall 
+CFLAGS  = -static -ffast-math -funroll-loops -pedantic -Wall -fcommon
 LDFLAGS = -static 
 LDLIB   = -ldl -lpthread -lz
 MATH    = -lm
